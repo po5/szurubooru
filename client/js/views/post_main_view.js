@@ -4,6 +4,7 @@ const iosCorrectedInnerHeight = require("@formfunfunction/inner-height");
 const router = require("../router.js");
 const views = require("../util/views.js");
 const uri = require("../util/uri.js");
+const misc = require("../util/misc.js");
 const keyboard = require("../util/keyboard.js");
 const PostContentControl = require("../controls/post_content_control.js");
 const PostNotesOverlayControl = require("../controls/post_notes_overlay_control.js");

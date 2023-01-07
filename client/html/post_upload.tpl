@@ -3,41 +3,39 @@
         <div class='dropper-container'></div>
 
         <div class='control-strip'>
-            <section class='control-options-expander'>
-                <div class='control-options'>
-                    <span class='skip-duplicates'>
-                        <%= ctx.makeCheckbox({
-                            text: 'Skip duplicate',
-                            name: 'skip-duplicates',
-                            checked: false,
-                        }) %>
-                    </span>
+            <div class='control-options'>
+                <span class='skip-duplicates'>
+                    <%= ctx.makeCheckbox({
+                        text: 'Skip duplicate',
+                        name: 'skip-duplicates',
+                        checked: false,
+                    }) %>
+                </span>
 
-                    <span class='always-upload-similar'>
-                        <%= ctx.makeCheckbox({
-                            text: 'Force upload similar',
-                            name: 'always-upload-similar',
-                            checked: false,
-                        }) %>
-                    </span>
+                <span class='always-upload-similar'>
+                    <%= ctx.makeCheckbox({
+                        text: 'Force upload similar',
+                        name: 'always-upload-similar',
+                        checked: false,
+                    }) %>
+                </span>
 
-                    <span class='pause-remain-on-error'>
-                        <%= ctx.makeCheckbox({
-                            text: 'Pause on error',
-                            name: 'pause-remain-on-error',
-                            checked: true,
-                        }) %>
-                    </span>
+                <span class='pause-remain-on-error'>
+                    <%= ctx.makeCheckbox({
+                        text: 'Pause on error',
+                        name: 'pause-remain-on-error',
+                        checked: true,
+                    }) %>
+                </span>
 
-                    <span class='upload-all-anonymous'>
-                        <%= ctx.makeCheckbox({
-                            text: 'Upload anonymously',
-                            name: 'upload-all-anonymous',
-                            checked: false,
-                        }) %>
-                    </span>
-                </div>
-            </section>
+                <span class='upload-all-anonymous'>
+                    <%= ctx.makeCheckbox({
+                        text: 'Upload anonymously',
+                        name: 'upload-all-anonymous',
+                        checked: false,
+                    }) %>
+                </span>
+            </div>
 
             <section class='common-tags'>
                 <%= ctx.makeTextInput({name: 'common-tags'}) %>

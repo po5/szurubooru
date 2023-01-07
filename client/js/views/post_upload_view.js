@@ -189,12 +189,6 @@ class PostUploadView extends events.EventTarget {
         );
         this._formNode.classList.add("inactive");
 
-        new ExpanderControl(
-            "control-options-expander",
-            "Options",
-            this._hostNode.querySelectorAll(".control-options-expander")
-        );
-
         this._commonTagsExpander = new ExpanderControl(
             "common-tags",
             "Common Tags (0)",

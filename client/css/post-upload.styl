@@ -53,12 +53,17 @@ $cancel-button-color = tomato
     .control-strip
         display: flex
         flex-direction: column
-        gap: 0.5em
+        gap: 1em
         margin-top: 1em
 
     .control-options
         display: flex
-        flex-direction: column
+        flex-wrap: wrap
+        gap: 0 1em
+
+        span
+            flex: 1 1 30%
+            white-space: nowrap
 
     .uploadables-container
         list-style-type: none

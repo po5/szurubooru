@@ -165,7 +165,6 @@ class PostListController {
                         tags: this._bulkEditTags,
                         markedForDeletion: this._postsMarkedForDeletion,
                     },
-                    postFlow: settings.get().postFlow,
                 });
                 const view = new PostsPageView(pageCtx);
                 view.addEventListener("tag", (e) => this._evtTag(e));

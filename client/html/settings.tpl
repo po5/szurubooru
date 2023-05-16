@@ -49,15 +49,6 @@
 
             <li>
                 <%= ctx.makeCheckbox({
-                    text: 'Use post flow',
-                    name: 'post-flow',
-                    checked: ctx.browsingSettings.postFlow,
-                }) %>
-                <p class='hint'>Use a content-aware flow for thumbnails on the post search page.</p>
-            </li>
-
-            <li>
-                <%= ctx.makeCheckbox({
                     text: 'Enable transparency stripes',
                     name: 'transparency-grid',
                     checked: ctx.browsingSettings.transparencyGrid,

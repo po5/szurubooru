@@ -6,18 +6,18 @@ const defaultSettings = {
     listPosts: {
         safe: true,
         sketchy: true,
-        unsafe: false,
+        unsafe: true,
     },
     upscaleSmallPosts: false,
     endlessScroll: false,
     keyboardShortcuts: true,
-    transparencyGrid: true,
+    transparencyGrid: false,
     fitMode: "fit-both",
     tagSuggestions: true,
-    autoplayVideos: false,
+    autoplayVideos: true,
     postsPerPage: 42,
     tagUnderscoresAsSpaces: false,
-    darkTheme: false,
+    darkTheme: true,
     postFlow: false,
 };
 

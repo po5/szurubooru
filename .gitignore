@@ -12,4 +12,6 @@ client/public
 server/**/lib/
 server/**/bin/
 server/**/pyvenv.cfg
+server/nginx.dev.conf
+server/run_dev.sh
 __pycache__/

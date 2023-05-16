@@ -58,11 +58,11 @@
 
             <li>
                 <%= ctx.makeCheckbox({
-                    text: 'Enable transparency grid',
+                    text: 'Enable transparency stripes',
                     name: 'transparency-grid',
                     checked: ctx.browsingSettings.transparencyGrid,
                 }) %>
-                <p class='hint'>Renders a checkered pattern behind posts with transparent background.</p>
+                <p class='hint'>Renders a striped pattern behind posts with transparent background.</p>
             </li>
 
             <li>

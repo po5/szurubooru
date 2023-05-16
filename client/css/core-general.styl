@@ -291,13 +291,7 @@ a .access-key
     height: 20px
     &.empty
         background-image:
-            linear-gradient(45deg, $transparency-grid-square-color 25%, transparent 25%),
-            linear-gradient(-45deg, $transparency-grid-square-color 25%, transparent 25%),
-            linear-gradient(45deg, transparent 75%, $transparency-grid-square-color 75%),
-            linear-gradient(-45deg, transparent 75%, $transparency-grid-square-color 75%)
-        background-position: 0 0, 0 10px, 10px -10px, -10px 0px
-        background-repeat: repeat
-        background-size: 20px 20px
+            repeating-linear-gradient(45deg, #1a1a1a, #1a1a1a 10px, #333 10px, #333 20px)
     img
         opacity: 0
         width: auto

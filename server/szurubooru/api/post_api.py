@@ -59,7 +59,7 @@ def create_post(
         auth.verify_privilege(ctx.user, "posts:create:identified")
     content = ctx.get_file(
         "content",
-        use_video_downloader=auth.has_privilege(
+        use_downloader=auth.has_privilege(
             ctx.user, "uploads:use_downloader"
         ),
     )
@@ -126,7 +126,7 @@ def update_post(ctx: rest.Context, params: Dict[str, str]) -> rest.Response:
             post,
             ctx.get_file(
                 "content",
-                use_video_downloader=auth.has_privilege(
+                use_downloader=auth.has_privilege(
                     ctx.user, "uploads:use_downloader"
                 ),
             ),

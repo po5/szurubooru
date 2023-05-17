@@ -42,6 +42,10 @@ const pools = require("./pools.js");
 const api = require("./api.js");
 const settings = require("./models/settings.js");
 
+if (!settings.get().darkTheme) {
+    document.body.classList.remove("darktheme");
+}
+
 Promise.resolve()
     .then(() => api.fetchConfig())
     .then(
@@ -96,8 +100,8 @@ Promise.resolve()
         }
     )
     .then(() => {
-        if (!settings.get().darkTheme) {
-            document.body.classList.remove("darktheme");
+        if (settings.get().darkTheme) {
+            document.body.classList.add("darktheme");
         }
     })
     .then(() => api.loginFromCookies())

@@ -38,10 +38,30 @@ shortcuts:</p>
             <td><kbd>Delete</kbd></td>
             <td>Delete post (while in edit mode)</td>
         </tr>
+
+        <tr>
+            <td><kbd>Alt+Shift+H</kbd></td>
+            <td>Home</td>
+        </tr>
+
+        <tr>
+            <td><kbd>Alt+Shift+P</kbd></td>
+            <td>Posts</td>
+        </tr>
+
+        <tr>
+            <td><kbd>Alt+Shift+C</kbd></td>
+            <td>Comments</td>
+        </tr>
+
+        <tr>
+            <td><kbd>Alt+Shift+T</kbd></td>
+            <td>Tags</td>
+        </tr>
+
+        <tr>
+            <td><kbd>Alt+Shift+O</kbd></td>
+            <td>Pools</td>
+        </tr>
     </tbody>
 </table>
-
-<p>Additionally, each item in the top navigation can be accessed using a
-feature called &ldquo;access keys&rdquo;. Pressing the underlined letter while
-holding Shift or Alt+Shift (depending on your browser) will go to the desired
-page (most browsers) or focus the link (IE).</p>

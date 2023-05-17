@@ -68,13 +68,13 @@
             </div>
         <% } %>
 
-        <% if (ctx.canListComments) { %>
-            <div class='comments-container'></div>
-        <% } %>
-
         <% if (ctx.canCreateComments) { %>
             <h2>Add comment</h2>
             <div class='comment-form-container'></div>
+        <% } %>
+
+        <% if (ctx.canListComments) { %>
+            <div class='comments-container'></div>
         <% } %>
     </div>
 </div>

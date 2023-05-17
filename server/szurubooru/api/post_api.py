@@ -164,10 +164,8 @@ def update_post(ctx: rest.Context, params: Dict[str, str]) -> rest.Response:
         auth.verify_privilege(ctx.user, "posts:edit:thumbnail")
         posts.update_post_thumbnail(post, ctx.get_file("thumbnail"))
     if ctx.has_param("description"):
-        # auth.verify_privilege(ctx.user, "posts:edit:description")
-        posts.update_post_description(
-            post, ctx.get_param_as_string("description")
-        )
+        auth.verify_privilege(ctx.user, "posts:edit:description")
+        posts.update_post_description(post, ctx.get_param_as_string("description"))
     post.last_edit_time = datetime.utcnow()
     ctx.session.flush()
     snapshots.modify(post, ctx.user)

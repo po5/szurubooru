@@ -96,8 +96,8 @@ Promise.resolve()
         }
     )
     .then(() => {
-        if (settings.get().darkTheme) {
-            document.body.classList.add("darktheme");
+        if (!settings.get().darkTheme) {
+            document.body.classList.remove("darktheme");
         }
     })
     .then(() => api.loginFromCookies())

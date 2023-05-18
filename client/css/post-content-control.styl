@@ -3,7 +3,7 @@
 .post-container
     .post-content.transparency-grid img
         background-image:
-            repeating-linear-gradient(45deg, #1a1a1a, #1a1a1a 10px, #333 10px, #333 20px)
+            repeating-linear-gradient(45deg, $window-color, $window-color 10px, #e6e6e6 10px, #e6e6e6 20px)
 
     text-align: center
     .post-content
@@ -22,3 +22,7 @@
 
         img
             image-orientation: from-image
+
+.darktheme .post-container .post-content.transparency-grid img
+    background-image:
+        repeating-linear-gradient(45deg, $window-color-darktheme, $window-color-darktheme 10px, #333 10px, #333 20px)

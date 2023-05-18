@@ -291,7 +291,7 @@ nav
     height: 20px
     &.empty
         background-image:
-            repeating-linear-gradient(45deg, #1a1a1a, #1a1a1a 10px, #333 10px, #333 20px)
+            repeating-linear-gradient(45deg, $window-color, $window-color 10px, #e6e6e6 10px, #e6e6e6 20px)
     img
         opacity: 0
         width: inherit
@@ -299,6 +299,10 @@ nav
     video
         width: inherit
         height: 100%
+
+.darktheme .thumbnail.empty
+    background-image:
+        repeating-linear-gradient(45deg, $window-color-darktheme, $window-color-darktheme 10px, #333 10px, #333 20px)
 
 .flexbox-dummy
     height: 0 !important

@@ -53,6 +53,7 @@ window.RufflePlayer.config = {
     "polyfills": true,
     "autoplay": "off",
     "warnOnUnsupportedContent": false,
+    "showSwfDownload": true,
     "splashScreen": false,
 };
 

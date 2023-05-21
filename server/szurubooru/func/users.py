@@ -42,6 +42,11 @@ def get_avatar_path(user_name: str) -> str:
 
 def get_avatar_url(user: model.User) -> str:
     assert user
+    if user.avatar_style.startswith(user.AVATAR_MOOD):
+        mood_id = user.avatar_style[len(user.AVATAR_MOOD)+1:]
+        if not mood_id.isdigit():
+            mood_id = AVATAR_MOOD_DEFAULT[len(user.AVATAR_MOOD)+1:]
+        return "/assets/mood/" + mood_id
     if user.avatar_style == user.AVATAR_GRAVATAR:
         assert user.email or user.name
         return "https://gravatar.com/avatar/%s?d=retro&s=%d" % (
@@ -223,7 +228,7 @@ def create_user(name: str, password: str, email: str) -> model.User:
     else:
         user.rank = model.User.RANK_ADMINISTRATOR
     user.creation_time = datetime.utcnow()
-    user.avatar_style = model.User.AVATAR_GRAVATAR
+    user.avatar_style = model.User.AVATAR_MOOD_DEFAULT
     return user
 
 
@@ -298,7 +303,13 @@ def update_user_avatar(
     user: model.User, avatar_style: str, avatar_content: Optional[bytes] = None
 ) -> None:
     assert user
-    if avatar_style == "gravatar":
+    if avatar_style.startswith(user.AVATAR_MOOD):
+        mood_id = avatar_style[len(user.AVATAR_MOOD)+1:]
+        if mood_id.isdigit():
+            user.avatar_style = avatar_style
+        else:
+            user.avatar_style = user.AVATAR_MOOD_DEFAULT
+    elif avatar_style == "gravatar":
         user.avatar_style = user.AVATAR_GRAVATAR
     elif avatar_style == "manual":
         user.avatar_style = user.AVATAR_MANUAL
@@ -316,7 +327,7 @@ def update_user_avatar(
     else:
         raise InvalidAvatarError(
             "Avatar style %r is invalid. Valid avatar styles: %r."
-            % (avatar_style, ["gravatar", "manual"])
+            % (avatar_style, ["gravatar", "manual", "mood_n"])
         )
 
 

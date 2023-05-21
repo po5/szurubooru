@@ -52,6 +52,22 @@
                     <label>Avatar</label>
                     <div id='avatar-content'></div>
                     <div id='avatar-radio'>
+                        <% if (ctx.user.avatarStyle.substring(0, 4) == 'mood') { %>
+                            <%= ctx.makeRadio({
+                                text: 'Mood',
+                                name: 'avatar-style',
+                                value: ctx.user.avatarStyle,
+                                selectedValue: ctx.user.avatarStyle,
+                            }) %>
+                        <% } else { %>
+                            <%= ctx.makeRadio({
+                                text: 'Mood',
+                                name: 'avatar-style',
+                                value: 'mood_5',
+                                selectedValue: ctx.user.avatarStyle,
+                            }) %>
+                        <% } %>
+
                         <%= ctx.makeRadio({
                             text: 'Gravatar',
                             name: 'avatar-style',

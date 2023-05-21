@@ -10,6 +10,8 @@ class User(Base):
 
     AVATAR_GRAVATAR = "gravatar"
     AVATAR_MANUAL = "manual"
+    AVATAR_MOOD = "mood"
+    AVATAR_MOOD_DEFAULT = "mood_5"
 
     RANK_ANONYMOUS = "anonymous"
     RANK_RESTRICTED = "restricted"
@@ -32,7 +34,7 @@ class User(Base):
     email = sa.Column("email", sa.Unicode(64), nullable=True)
     rank = sa.Column("rank", sa.Unicode(32), nullable=False)
     avatar_style = sa.Column(
-        "avatar_style", sa.Unicode(32), nullable=False, default=AVATAR_GRAVATAR
+        "avatar_style", sa.Unicode(32), nullable=False, default=AVATAR_MOOD_DEFAULT
     )
 
     comments = sa.orm.relationship("Comment")

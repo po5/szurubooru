@@ -277,8 +277,8 @@ class PostSerializer(serialization.BaseSerializer):
             {
                 post["id"]: post
                 for post in [
-                    serialize_micro_post(rel, self.auth_user)
-                    for rel in self.post.relations
+                    serialize_micro_post(try_get_post_by_id(rel.child_id), self.auth_user)
+                    for rel in get_post_relations(self.post.post_id)
                 ]
             }.values(),
             key=lambda post: post["id"],
@@ -376,6 +376,10 @@ def serialize_micro_post(
 
 def get_post_count() -> int:
     return db.session.query(sa.func.count(model.Post.post_id)).one()[0]
+
+
+def get_post_relations(post_id: int) -> List[model.Post]:
+    return db.session.query(model.PostRelation).filter(model.PostRelation.parent_id == post_id).all()
 
 
 def try_get_post_by_id(post_id: int) -> Optional[model.Post]:
@@ -726,8 +730,8 @@ def update_post_relations(post: model.Post, new_post_ids: List[int]) -> None:
         new_post_ids = [int(id) for id in new_post_ids]
     except ValueError:
         raise InvalidPostRelationError("A relation must be numeric post ID.")
-    old_posts = post.relations
-    old_post_ids = [int(p.post_id) for p in old_posts]
+    old_posts = get_post_relations(post.post_id)
+    old_post_ids = [int(p.child_id) for p in old_posts]
     if new_post_ids:
         new_posts = (
             db.session.query(model.Post)
@@ -741,7 +745,7 @@ def update_post_relations(post: model.Post, new_post_ids: List[int]) -> None:
     if post.post_id in new_post_ids:
         raise InvalidPostRelationError("Post cannot relate to itself.")
 
-    relations_to_del = [p for p in old_posts if p.post_id not in new_post_ids]
+    relations_to_del = [p for p in old_posts if p.child_id not in new_post_ids]
     relations_to_add = [p for p in new_posts if p.post_id not in old_post_ids]
     for relation in relations_to_del:
         post.relations.remove(relation)

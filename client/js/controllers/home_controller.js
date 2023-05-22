@@ -23,7 +23,6 @@ class HomeController {
         Info.get().then(
             (info) => {
                 this._homeView.setStats({
-                    diskUsage: info.diskUsage,
                     postCount: info.postCount,
                 });
                 this._homeView.setFeaturedPost({

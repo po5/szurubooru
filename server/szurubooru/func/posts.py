@@ -109,21 +109,13 @@ def _get_nearby_iter(post_list):
     return zip(previous_item, current_item, next_item)
 
 
-def get_post_security_hash(id: int) -> str:
-    return hmac.new(
-        config.config["secret"].encode("utf8"),
-        msg=str(id).encode("utf-8"),
-        digestmod="md5",
-    ).hexdigest()[0:16]
-
-
 def get_post_content_url(post: model.Post) -> str:
     assert post
     return "%s/posts/%s%d_%s.%s" % (
         config.config["data_url"].rstrip("/"),
         config.config["thumbnails"]["post_filename_prefix"],
         post.post_id,
-        get_post_security_hash(post.post_id),
+        post.checksum,
         mime.get_extension(post.mime_type) or "dat",
     )
 
@@ -134,7 +126,7 @@ def get_post_thumbnail_url(post: model.Post) -> str:
         config.config["data_url"].rstrip("/"),
         config.config["thumbnails"]["post_filename_prefix"],
         post.post_id,
-        get_post_security_hash(post.post_id),
+        post.checksum,
     )
 
 
@@ -144,7 +136,7 @@ def get_post_content_path(post: model.Post) -> str:
     return "posts/%s%d_%s.%s" % (
         config.config["thumbnails"]["post_filename_prefix"],
         post.post_id,
-        get_post_security_hash(post.post_id),
+        post.checksum,
         mime.get_extension(post.mime_type) or "dat",
     )
 
@@ -154,7 +146,7 @@ def get_post_thumbnail_path(post: model.Post) -> str:
     return "generated-thumbnails/sample_%s%d_%s.jpg" % (
         config.config["thumbnails"]["post_filename_prefix"],
         post.post_id,
-        get_post_security_hash(post.post_id),
+        post.checksum,
     )
 
 
@@ -163,7 +155,7 @@ def get_post_thumbnail_backup_path(post: model.Post) -> str:
     return "posts/custom-thumbnails/%s%d_%s.dat" % (
         config.config["thumbnails"]["post_filename_prefix"],
         post.post_id,
-        get_post_security_hash(post.post_id),
+        post.checksum,
     )
 
 

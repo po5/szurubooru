@@ -1,9 +1,10 @@
 @import colors
 
 .post-container
-    .post-content.transparency-grid img
-        background-image:
-            repeating-linear-gradient(45deg, $window-color, $window-color 10px, #e6e6e6 10px, #e6e6e6 20px)
+    .post-content
+        &.transparency-grid, &.post-error
+            background-image:
+                repeating-linear-gradient(45deg, $window-color, $window-color 10px, #e6e6e6 10px, #e6e6e6 20px)
 
     text-align: center
     .post-content
@@ -12,6 +13,8 @@
         position: relative
 
         .resize-listener
+            background-repeat: no-repeat
+            background-size: cover
             position: absolute
             left: 0
             right: 0
@@ -23,6 +26,7 @@
         img
             image-orientation: from-image
 
-.darktheme .post-container .post-content.transparency-grid img
-    background-image:
-        repeating-linear-gradient(45deg, $window-color-darktheme, $window-color-darktheme 10px, #333 10px, #333 20px)
+.darktheme .post-container .post-content
+    &.transparency-grid, &.post-error
+        background-image:
+            repeating-linear-gradient(45deg, $window-color-darktheme, $window-color-darktheme 10px, #333 10px, #333 20px)

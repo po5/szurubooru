@@ -10,7 +10,6 @@ _cache_result = None  # type: Optional[int]
 
 @rest.routes.get("/info/?")
 def get_info(ctx: rest.Context, _params: Dict[str, str] = {}) -> rest.Response:
-    post_feature = posts.try_get_current_post_feature()
     ret = {
         "postCount": posts.get_post_count(),
         "serverTime": datetime.utcnow(),
@@ -29,16 +28,4 @@ def get_info(ctx: rest.Context, _params: Dict[str, str] = {}) -> rest.Response:
             ),
         },
     }
-    if auth.has_privilege(ctx.user, "posts:view:featured"):
-        ret["featuredPost"] = (
-            posts.serialize_post(post_feature.post, ctx.user)
-            if post_feature
-            else None
-        )
-        ret["featuringUser"] = (
-            users.serialize_user(post_feature.user, ctx.user)
-            if post_feature
-            else None
-        )
-        ret["featuringTime"] = post_feature.time if post_feature else None
     return ret

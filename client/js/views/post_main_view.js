@@ -61,6 +61,7 @@ class PostMainView {
         this._installCommentForm();
         this._installComments(ctx.post.comments);
         this._installPoolNavigators(ctx.poolPostsNearby);
+        this.postDescription = document.getElementById("post-description");
 
         const showPreviousImage = () => {
             if (ctx.prevPostId) {

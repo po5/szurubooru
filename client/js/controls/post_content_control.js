@@ -93,7 +93,6 @@ class PostContentControl {
 
     _evtPostContentChange(e) {
         this._post = e.detail.post;
-        this._post.mutateContentUrl();
         this._reinstall();
     }
 

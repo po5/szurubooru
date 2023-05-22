@@ -18,6 +18,7 @@ thumbnails:
     avatar_height: 300
     post_width: 300
     post_height: 300
+    post_filename_prefix: ''
 
 # settings used to download files from the web on behalf of the api users
 user_agent:

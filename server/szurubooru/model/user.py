@@ -27,7 +27,7 @@ class User(Base):
     version = sa.Column("version", sa.Integer, default=1, nullable=False)
     name = sa.Column("name", sa.Unicode(50), nullable=False, unique=True)
     password_hash = sa.Column("password_hash", sa.Unicode(128), nullable=False)
-    password_salt = sa.Column("password_salt", sa.Unicode(32))
+    image_key = sa.Column("image_key", sa.Unicode(32))
     password_revision = sa.Column(
         "password_revision", sa.SmallInteger, default=0, nullable=False
     )

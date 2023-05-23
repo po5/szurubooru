@@ -9,6 +9,7 @@ import sqlalchemy as sa
 
 from szurubooru import config, db, errors, model, rest
 from szurubooru.func import (
+    auth,
     comments,
     files,
     image_hash,
@@ -115,7 +116,7 @@ def get_post_content_url(post: model.Post) -> str:
         config.config["data_url"].rstrip("/"),
         config.config["thumbnails"]["post_filename_prefix"],
         post.post_id,
-        post.checksum,
+        post.image_key,
         mime.get_extension(post.mime_type) or "dat",
     )
 
@@ -126,7 +127,7 @@ def get_post_thumbnail_url(post: model.Post) -> str:
         config.config["data_url"].rstrip("/"),
         config.config["thumbnails"]["post_filename_prefix"],
         post.post_id,
-        post.checksum,
+        post.image_key,
     )
 
 
@@ -136,7 +137,7 @@ def get_post_content_path(post: model.Post) -> str:
     return "posts/%s%d_%s.%s" % (
         config.config["thumbnails"]["post_filename_prefix"],
         post.post_id,
-        post.checksum,
+        post.image_key,
         mime.get_extension(post.mime_type) or "dat",
     )
 
@@ -146,7 +147,7 @@ def get_post_thumbnail_path(post: model.Post) -> str:
     return "generated-thumbnails/sample_%s%d_%s.jpg" % (
         config.config["thumbnails"]["post_filename_prefix"],
         post.post_id,
-        post.checksum,
+        post.image_key,
     )
 
 
@@ -155,7 +156,7 @@ def get_post_thumbnail_backup_path(post: model.Post) -> str:
     return "posts/custom-thumbnails/%s%d_%s.dat" % (
         config.config["thumbnails"]["post_filename_prefix"],
         post.post_id,
-        post.checksum,
+        post.image_key,
     )
 
 
@@ -434,6 +435,7 @@ def create_post(
     post.type = ""
     post.checksum = ""
     post.mime_type = ""
+    post.image_key = ""
 
     update_post_content(post, content)
     new_tags = update_post_tags(post, tag_names)
@@ -647,6 +649,7 @@ def update_post_content(post: model.Post, content: Optional[bytes]) -> None:
 
     post.checksum = util.get_sha1(content)
     post.checksum_md5 = util.get_md5(content)
+    post.image_key = auth.create_password()
     other_post = (
         db.session.query(model.Post)
         .filter(model.Post.checksum == post.checksum)

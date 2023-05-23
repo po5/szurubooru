@@ -1,5 +1,6 @@
 import hashlib
-import random
+import secrets
+import string
 import uuid
 from collections import OrderedDict
 from datetime import datetime
@@ -10,6 +11,8 @@ from nacl.exceptions import InvalidkeyError
 
 from szurubooru import config, db, errors, model
 from szurubooru.func import util
+
+random = secrets.SystemRandom()
 
 RANK_MAP = OrderedDict(
     [
@@ -24,69 +27,31 @@ RANK_MAP = OrderedDict(
 )
 
 
-def get_password_hash(salt: str, password: str) -> Tuple[str, int]:
+def get_password_hash(password: str) -> Tuple[str, int]:
     """Retrieve argon2id password hash."""
     return (
         pwhash.argon2id.str(
-            (config.config["secret"] + salt + password).encode("utf8")
+            (config.config["secret"] + password).encode("utf8")
         ).decode("utf8"),
-        3,
+        4,
     )
 
 
-def get_sha256_legacy_password_hash(
-    salt: str, password: str
-) -> Tuple[str, int]:
-    """Retrieve old-style sha256 password hash."""
-    digest = hashlib.sha256()
-    digest.update(config.config["secret"].encode("utf8"))
-    digest.update(salt.encode("utf8"))
-    digest.update(password.encode("utf8"))
-    return digest.hexdigest(), 2
-
-
-def get_sha1_legacy_password_hash(salt: str, password: str) -> Tuple[str, int]:
-    """Retrieve old-style sha1 password hash."""
-    digest = hashlib.sha1()
-    digest.update(b"1A2/$_4xVa")
-    digest.update(salt.encode("utf8"))
-    digest.update(password.encode("utf8"))
-    return digest.hexdigest(), 1
-
-
 def create_password() -> str:
-    alphabet = {
-        "c": list("bcdfghijklmnpqrstvwxyz"),
-        "v": list("aeiou"),
-        "n": list("0123456789"),
-    }
-    pattern = "cvcvnncvcv"
-    return "".join(random.choice(alphabet[type]) for type in list(pattern))
+    alphabet = string.ascii_letters+string.digits
+    return "".join([random.choice(alphabet) for _ in range(16)])
 
 
 def is_valid_password(user: model.User, password: str) -> bool:
     assert user
-    salt, valid_hash = user.password_salt, user.password_hash
 
     try:
         return pwhash.verify(
             user.password_hash.encode("utf8"),
-            (config.config["secret"] + salt + password).encode("utf8"),
+            (config.config["secret"] + password).encode("utf8"),
         )
     except InvalidkeyError:
-        possible_hashes = [
-            get_sha256_legacy_password_hash(salt, password)[0],
-            get_sha1_legacy_password_hash(salt, password)[0],
-        ]
-        if valid_hash in possible_hashes:
-            # Convert the user password hash to the new hash
-            new_hash, revision = get_password_hash(salt, password)
-            user.password_hash = new_hash
-            user.password_revision = revision
-            db.session.commit()
-            return True
-
-    return False
+        return False
 
 
 def is_valid_token(user_token: Optional[model.UserToken]) -> bool:
@@ -127,9 +92,9 @@ def verify_privilege(user: model.User, privilege_name: str) -> None:
 def generate_authentication_token(user: model.User) -> str:
     """Generate nonguessable challenge (e.g. links in password reminder)."""
     assert user
-    digest = hashlib.md5()
+    digest = hashlib.sha256()
     digest.update(config.config["secret"].encode("utf8"))
-    digest.update(user.password_salt.encode("utf8"))
+    digest.update(user.password_hash.encode("utf8"))
     return digest.hexdigest()
 
 

@@ -36,8 +36,8 @@ class InvalidAvatarError(errors.ValidationError):
     pass
 
 
-def get_avatar_path(user_name: str) -> str:
-    return "avatars/" + user_name.lower() + ".png"
+def get_avatar_path(user_name: str, image_key: str) -> str:
+    return "avatars/" + user_name.lower() + "_" + image_key + ".jpg"
 
 
 def get_avatar_url(user: model.User) -> str:
@@ -50,13 +50,14 @@ def get_avatar_url(user: model.User) -> str:
     if user.avatar_style == user.AVATAR_GRAVATAR:
         assert user.email or user.name
         return "https://gravatar.com/avatar/%s?d=retro&s=%d" % (
-            util.get_md5((user.email or user.name).lower()),
+            util.get_md5(user.image_key),
             config.config["thumbnails"]["avatar_width"],
         )
     assert user.name
-    return "%s/avatars/%s.png" % (
+    return "%s/avatars/%s_%s.jpg" % (
         config.config["data_url"].rstrip("/"),
         user.name.lower(),
+        user.image_key,
     )
 
 
@@ -247,8 +248,8 @@ def update_user_name(user: model.User, name: str) -> None:
     other_user = try_get_user_by_name(name)
     if other_user and other_user.user_id != user.user_id:
         raise UserAlreadyExistsError("User %r already exists." % name)
-    if user.name and files.has(get_avatar_path(user.name)):
-        files.move(get_avatar_path(user.name), get_avatar_path(name))
+    if user.name and files.has(get_avatar_path(user.name, user.image_key)):
+        files.move(get_avatar_path(user.name, user.image_key), get_avatar_path(name, user.image_key))
     user.name = name
 
 
@@ -261,10 +262,7 @@ def update_user_password(user: model.User, password: str) -> None:
         raise InvalidPasswordError(
             "Password must satisfy regex %r." % password_regex
         )
-    user.password_salt = auth.create_password()
-    password_hash, revision = auth.get_password_hash(
-        user.password_salt, password
-    )
+    password_hash, revision = auth.get_password_hash(password)
     user.password_hash = password_hash
     user.password_revision = revision
 
@@ -313,7 +311,10 @@ def update_user_avatar(
         user.avatar_style = user.AVATAR_GRAVATAR
     elif avatar_style == "manual":
         user.avatar_style = user.AVATAR_MANUAL
-        avatar_path = "avatars/" + user.name.lower() + ".png"
+        avatar_path = "avatars/%s_%s.jpg" % (
+            user.name.lower(),
+            user.image_key,
+        )
         if not avatar_content:
             if files.has(avatar_path):
                 return
@@ -323,7 +324,12 @@ def update_user_avatar(
             int(config.config["thumbnails"]["avatar_width"]),
             int(config.config["thumbnails"]["avatar_height"]),
         )
-        files.save(avatar_path, image.to_png())
+        user.image_key = auth.create_password()
+        avatar_path = "avatars/%s_%s.jpg" % (
+            user.name.lower(),
+            user.image_key,
+        )
+        files.save(avatar_path, image.to_jpeg())
     else:
         raise InvalidAvatarError(
             "Avatar style %r is invalid. Valid avatar styles: %r."
@@ -339,10 +345,7 @@ def bump_user_login_time(user: model.User) -> None:
 def reset_user_password(user: model.User) -> str:
     assert user
     password = auth.create_password()
-    user.password_salt = auth.create_password()
-    password_hash, revision = auth.get_password_hash(
-        user.password_salt, password
-    )
+    password_hash, revision = auth.get_password_hash(password)
     user.password_hash = password_hash
     user.password_revision = revision
     return password

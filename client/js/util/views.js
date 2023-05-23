@@ -326,7 +326,7 @@ function _serializeElement(name, attributes) {
 }
 
 function makeElement(name, attrs, ...content) {
-    return content.length !== undefined
+    return content.length !== undefined && content.length !== null
         ? `<${_serializeElement(name, attrs)}>${content.join("")}</${name}>`
         : `<${_serializeElement(name, attrs)}/>`;
 }

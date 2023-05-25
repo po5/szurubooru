@@ -100,6 +100,7 @@ TYPE_MAP = {
 FLAG_MAP = {
     model.Post.FLAG_LOOP: "loop",
     model.Post.FLAG_SOUND: "sound",
+    model.Post.FLAG_TAGME: "tagme",
 }
 
 # https://stackoverflow.com/a/1012089
@@ -574,6 +575,7 @@ def get_default_flags(content: bytes) -> List[str]:
     elif mime.is_video(mime.get_mime_type(content)):
         if images.Image(content).check_for_sound():
             ret.append(model.Post.FLAG_SOUND)
+    ret.append(model.Post.FLAG_TAGME)
     return ret
 
 
@@ -816,10 +818,12 @@ def update_post_notes(post: model.Post, notes: Any) -> None:
         )
 
 
-def update_post_flags(post: model.Post, flags: List[str]) -> None:
+def update_post_flags(post: model.Post, flags: List[str], remove: bool = False) -> None:
     assert post
     target_flags = []
     for flag in flags:
+        if remove and flag == model.Post.FLAG_TAGME:
+            continue
         flag = util.flip(FLAG_MAP).get(flag, None)
         if not flag:
             raise InvalidPostFlagError(

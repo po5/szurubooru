@@ -89,6 +89,12 @@ def create_post(
     if ctx.has_param("description"):
         auth.verify_privilege(ctx.user, "posts:edit:description")
         posts.update_post_description(post, ctx.get_param_as_string("description"))
+    if ctx.has_param("title"):
+        auth.verify_privilege(ctx.user, "posts:edit:title")
+        posts.update_post_title(post, ctx.get_param_as_string("title"))
+    if ctx.has_param("altText"):
+        auth.verify_privilege(ctx.user, "posts:edit:alt_text")
+        posts.update_post_alt_text(post, ctx.get_param_as_string("altText"))
     ctx.session.add(post)
     ctx.session.flush()
     create_snapshots_for_post(post, new_tags, None if anonymous else ctx.user)
@@ -171,6 +177,12 @@ def update_post(ctx: rest.Context, params: Dict[str, str]) -> rest.Response:
     if ctx.has_param("description"):
         auth.verify_privilege(ctx.user, "posts:edit:description")
         posts.update_post_description(post, ctx.get_param_as_string("description"))
+    if ctx.has_param("title"):
+        auth.verify_privilege(ctx.user, "posts:edit:title")
+        posts.update_post_title(post, ctx.get_param_as_string("title"))
+    if ctx.has_param("altText"):
+        auth.verify_privilege(ctx.user, "posts:edit:alt_text")
+        posts.update_post_alt_text(post, ctx.get_param_as_string("altText"))
     post.last_edit_time = datetime.utcnow()
     ctx.session.flush()
     snapshots.modify(post, ctx.user)

@@ -101,6 +101,7 @@ privileges:
     'posts:reverse_search':         regular
     'posts:view':                   anonymous
     'posts:view:featured':          anonymous
+    'posts:edit:alt_text':          power
     'posts:edit:content':           power
     'posts:edit:flags':             regular
     'posts:edit:notes':             regular
@@ -109,6 +110,7 @@ privileges:
     'posts:edit:source':            regular
     'posts:edit:tags':              regular
     'posts:edit:thumbnail':         power
+    'posts:edit:title':             power
     'posts:feature':                moderator
     'posts:delete':                 moderator
     'posts:score':                  regular

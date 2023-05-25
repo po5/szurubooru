@@ -84,6 +84,14 @@ class InvalidPostDescriptionError(errors.ValidationError):
     pass
 
 
+class InvalidPostTitleError(errors.ValidationError):
+    pass
+
+
+class InvalidPostAltTextError(errors.ValidationError):
+    pass
+
+
 SAFETY_MAP = {
     model.Post.SAFETY_SAFE: "safe",
     model.Post.SAFETY_SKETCHY: "sketchy",
@@ -215,6 +223,8 @@ class PostSerializer(serialization.BaseSerializer):
             "flags": self.serialize_flags,
             "tags": self.serialize_tags,
             "description": self.serialize_description,
+            "title": self.serialize_title,
+            "altText": self.serialize_alt_text,
             "relations": self.serialize_relations,
             "user": self.serialize_user,
             "score": self.serialize_score,
@@ -293,6 +303,12 @@ class PostSerializer(serialization.BaseSerializer):
 
     def serialize_description(self) -> Any:
         return self.post.description
+
+    def serialize_title(self) -> Any:
+        return self.post.title
+
+    def serialize_alt_text(self) -> Any:
+        return self.post.alt_text
 
     def serialize_relations(self) -> Any:
         return sorted(
@@ -838,6 +854,20 @@ def update_post_description(post: model.Post, description: str) -> None:
     if util.value_exceeds_column_size(description, model.Post.description):
         raise InvalidPostDescriptionError("Description is too long.")
     post.description = description or None
+
+
+def update_post_title(post: model.Post, title: str) -> None:
+    assert post
+    if util.value_exceeds_column_size(title, model.Post.title):
+        raise InvalidPostTitleError("Title is too long.")
+    post.title = title or None
+
+
+def update_post_alt_text(post: model.Post, alt_text: str) -> None:
+    assert post
+    if util.value_exceeds_column_size(alt_text, model.Post.alt_text):
+        raise InvalidPostAltTextError("Title is too long.")
+    post.alt_text = alt_text or None
 
 
 def feature_post(post: model.Post, user: Optional[model.User]) -> None:

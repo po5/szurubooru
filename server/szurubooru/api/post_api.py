@@ -86,6 +86,9 @@ def create_post(
     posts.update_post_flags(post, flags)
     if ctx.has_file("thumbnail"):
         posts.update_post_thumbnail(post, ctx.get_file("thumbnail"))
+    if ctx.has_param("description"):
+        auth.verify_privilege(ctx.user, "posts:edit:description")
+        posts.update_post_description(post, ctx.get_param_as_string("description"))
     ctx.session.add(post)
     ctx.session.flush()
     create_snapshots_for_post(post, new_tags, None if anonymous else ctx.user)

@@ -44,12 +44,19 @@ def create_password() -> str:
 
 def is_valid_password(user: model.User, password: str) -> bool:
     assert user
+    pw = config.config["secret"] + password
+
+    if user.password_revision == 3:
+        pw = password
 
     try:
-        return pwhash.verify(
-            user.password_hash.encode("utf8"),
-            (config.config["secret"] + password).encode("utf8"),
-        )
+        ok = pwhash.verify(user.password_hash.encode("utf8"), pw.encode("utf8"))
+        if ok and user.password_revision != 4:
+            new_hash, revision = get_password_hash(password)
+            user.password_hash = new_hash
+            user.password_revision = revision
+            db.session.commit()
+        return ok
     except InvalidkeyError:
         return False
 

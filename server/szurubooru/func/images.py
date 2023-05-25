@@ -49,7 +49,7 @@ class Image:
     def frames(self) -> int:
         return self.info["streams"][0]["nb_read_frames"]
 
-    def resize_fill(self, width: int, height: int, keep_transparency: bool = True) -> None:
+    def resize_fill(self, width: int, height: int, keep_transparency: bool = True, seek=True) -> None:
         width_greater = self.width > self.height
         width, height = (-1, height) if width_greater else (width, -1)
 
@@ -72,7 +72,7 @@ class Image:
             "png",
             "-",
         ]
-        if "duration" in self.info["format"]:
+        if seek and "duration" in self.info["format"]:
             duration = float(self.info["format"]["duration"])
             if duration > 3:
                 cli = [

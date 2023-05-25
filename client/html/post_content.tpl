@@ -21,7 +21,7 @@
                 playsinline: true,
                 autoplay: ctx.autoplay,
                 preload: 'auto',
-                poster: ctx.post.thumbnailUrl,
+                poster: ctx.post.originalThumbnailUrl,
             },
             ctx.makeElement('source', {
                 type: ctx.post.mimeType,

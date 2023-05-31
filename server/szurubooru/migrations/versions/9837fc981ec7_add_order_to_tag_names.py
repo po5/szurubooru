@@ -29,7 +29,6 @@ class TagName(Base):
 def upgrade():
     op.add_column("tag_name", sa.Column("ord", sa.Integer(), nullable=True))
     op.execute(TagName.__table__.update().values(ord=TagName.tag_name_id))
-    op.alter_column("tag_name", "ord", nullable=False)
     op.create_index(op.f("ix_tag_name_ord"), "tag_name", ["ord"], unique=False)
 
 

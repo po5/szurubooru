@@ -16,7 +16,8 @@ depends_on = None
 
 def upgrade():
     conn = op.get_bind()
-    op.alter_column("post", "flags", new_column_name="oldflags")
+    with op.batch_alter_table("post"):
+        op.alter_column("post", "flags", new_column_name="oldflags")
     op.add_column(
         "post", sa.Column("flags", sa.Unicode(200), default="", nullable=True)
     )
@@ -37,7 +38,8 @@ def upgrade():
 
 def downgrade():
     conn = op.get_bind()
-    op.alter_column("post", "flags", new_column_name="oldflags")
+    with op.batch_alter_table("post"):
+        op.alter_column("post", "flags", new_column_name="oldflags")
     op.add_column("post", sa.Column("flags", sa.PickleType(), nullable=True))
     posts = sa.Table(
         "post",

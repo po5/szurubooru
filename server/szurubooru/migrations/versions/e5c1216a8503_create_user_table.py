@@ -28,7 +28,7 @@ def upgrade():
         sa.Column("avatar_style", sa.Unicode(length=32), nullable=False),
         sa.PrimaryKeyConstraint("id"),
     )
-    op.create_unique_constraint("uq_user_name", "user", ["name"])
+    #op.create_unique_constraint("uq_user_name", "user", ["name"])
 
 
 def downgrade():

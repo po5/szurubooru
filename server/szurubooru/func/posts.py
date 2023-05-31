@@ -596,51 +596,15 @@ def get_default_flags(content: bytes) -> List[str]:
 
 
 def purge_post_signature(post: model.Post) -> None:
-    (
-        db.session.query(model.PostSignature)
-        .filter(model.PostSignature.post_id == post.post_id)
-        .delete()
-    )
+    return
 
 
 def generate_post_signature(post: model.Post, content: bytes) -> None:
-    try:
-        unpacked_signature = image_hash.generate_signature(content)
-        packed_signature = image_hash.pack_signature(unpacked_signature)
-        words = image_hash.generate_words(unpacked_signature)
-
-        db.session.add(
-            model.PostSignature(
-                post=post, signature=packed_signature, words=words
-            )
-        )
-    except errors.ProcessingError:
-        if not config.config["allow_broken_uploads"]:
-            raise InvalidPostContentError(
-                "Unable to generate image hash data."
-            )
+    return
 
 
 def update_all_post_signatures() -> None:
-    posts_to_hash = (
-        db.session.query(model.Post)
-        .filter(
-            (model.Post.type == model.Post.TYPE_IMAGE)
-            | (model.Post.type == model.Post.TYPE_ANIMATION)
-        )
-        .filter(model.Post.signature == None)  # noqa: E711
-        .order_by(model.Post.post_id.asc())
-        .all()
-    )
-    for post in posts_to_hash:
-        try:
-            generate_post_signature(
-                post, files.get(get_post_content_path(post))
-            )
-            db.session.commit()
-            logger.info("Created Signature - Post %d", post.post_id)
-        except Exception as ex:
-            logger.exception(ex)
+    return
 
 
 def update_all_md5_checksums() -> None:
@@ -701,7 +665,6 @@ def update_post_content(post: model.Post, content: Optional[bytes]) -> None:
 
     if update_signature:
         purge_post_signature(post)
-        post.signature = generate_post_signature(post, content)
 
     post.file_size = len(content)
     try:
@@ -1006,46 +969,7 @@ def search_by_image_exact(image_content: bytes) -> Optional[model.Post]:
 
 
 def search_by_image(image_content: bytes) -> List[Tuple[float, model.Post]]:
-    query_signature = image_hash.generate_signature(image_content)
-    query_words = image_hash.generate_words(query_signature)
-
-    """
-    The unnest function is used here to expand one row containing the 'words'
-    array into multiple rows each containing a singular word.
-
-    Documentation of the unnest function can be found here:
-    https://www.postgresql.org/docs/9.2/functions-array.html
-    """
-
-    dbquery = """
-    SELECT s.post_id, s.signature, count(a.query) AS score
-    FROM post_signature AS s, unnest(s.words, :q) AS a(word, query)
-    WHERE a.word = a.query
-    GROUP BY s.post_id
-    ORDER BY score DESC LIMIT 100;
-    """
-
-    candidates = db.session.execute(dbquery, {"q": query_words})
-    data = tuple(
-        zip(
-            *[
-                (post_id, image_hash.unpack_signature(packedsig))
-                for post_id, packedsig, score in candidates
-            ]
-        )
-    )
-    if data:
-        candidate_post_ids, sigarray = data
-        distances = image_hash.normalized_distance(sigarray, query_signature)
-        return [
-            (distance, try_get_post_by_id(candidate_post_id))
-            for candidate_post_id, distance in zip(
-                candidate_post_ids, distances
-            )
-            if distance < image_hash.DISTANCE_CUTOFF
-        ]
-    else:
-        return []
+    return []
 
 PoolPostsNearby = namedtuple('PoolPostsNearby', 'pool first_post prev_post next_post last_post')
 def get_pools_nearby(

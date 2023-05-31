@@ -15,36 +15,24 @@ depends_on = None
 
 
 def upgrade():
-    op.alter_column(
-        "tag_name",
-        "name",
-        type_=sa.Unicode(128),
-        existing_type=sa.Unicode(64),
-        existing_nullable=False,
-    )
-
-    op.alter_column(
-        "snapshot",
-        "resource_name",
-        type_=sa.Unicode(128),
-        existing_type=sa.Unicode(64),
-        existing_nullable=False,
-    )
+    pass
 
 
 def downgrade():
-    op.alter_column(
-        "tag_name",
-        "name",
-        type_=sa.Unicode(64),
-        existing_type=sa.Unicode(128),
-        existing_nullable=False,
-    )
+    with op.batch_alter_table("tag_name"):
+        op.alter_column(
+            "tag_name",
+            "name",
+            type_=sa.Unicode(64),
+            existing_type=sa.Unicode(128),
+            existing_nullable=False,
+        )
 
-    op.alter_column(
-        "snapshot",
-        "resource_name",
-        type_=sa.Unicode(64),
-        existing_type=sa.Unicode(128),
-        existing_nullable=False,
-    )
+    with op.batch_alter_table("snapshot"):
+        op.alter_column(
+            "snapshot",
+            "resource_name",
+            type_=sa.Unicode(64),
+            existing_type=sa.Unicode(128),
+            existing_nullable=False,
+        )

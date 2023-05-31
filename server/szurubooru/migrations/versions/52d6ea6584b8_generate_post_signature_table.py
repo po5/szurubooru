@@ -15,12 +15,11 @@ depends_on = None
 
 
 def upgrade():
-    ArrayType = sa.dialects.postgresql.ARRAY(sa.Integer, dimensions=1)
     op.create_table(
         "post_signature",
         sa.Column("post_id", sa.Integer(), nullable=False),
         sa.Column("signature", sa.LargeBinary(), nullable=False),
-        sa.Column("words", ArrayType, nullable=False),
+        sa.Column("words", sa.Unicode(2048), nullable=False),
         sa.ForeignKeyConstraint(["post_id"], ["post.id"]),
         sa.PrimaryKeyConstraint("post_id"),
     )

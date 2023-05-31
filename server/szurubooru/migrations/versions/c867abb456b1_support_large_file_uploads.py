@@ -15,12 +15,10 @@ depends_on = None
 
 
 def upgrade():
-    op.alter_column(
-        "post", "file_size", type_=sa.BigInteger, existing_type=sa.Integer
-    )
-
+    pass
 
 def downgrade():
-    op.alter_column(
-        "post", "file_size", type_=sa.Integer, existing_type=sa.BigInteger
-    )
+    with op.batch_alter_table("post"):
+        op.alter_column(
+            "post", "file_size", type_=sa.Integer, existing_type=sa.BigInteger
+        )

@@ -23,7 +23,6 @@ def upgrade():
         .update()
         .values(default=False)
     )
-    op.alter_column("tag_category", "default", nullable=False)
 
 
 def downgrade():

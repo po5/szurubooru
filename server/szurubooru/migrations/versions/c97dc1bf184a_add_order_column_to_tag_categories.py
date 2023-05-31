@@ -21,8 +21,6 @@ def upgrade():
     op.execute(
         sa.table("tag_category", sa.column("order")).update().values(order=1)
     )
-    op.alter_column("tag_category", "order", nullable=False)
-
 
 def downgrade():
     op.drop_column("tag_category", "order")

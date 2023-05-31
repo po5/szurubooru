@@ -22,7 +22,6 @@ def upgrade():
         op.execute(
             sa.table(table, sa.column("version")).update().values(version=1)
         )
-        op.alter_column(table, "version", nullable=False)
 
 
 def downgrade():

@@ -21,7 +21,9 @@ body
     min-height: 100%
 
 body
-    background: $window-color
+    background-color: $window-color
+    background-image: linear-gradient(180deg, $gradient-top, $window-color 200px)
+    background-repeat: no-repeat
     overflow-y: scroll
     margin: 0
     color: $text-color
@@ -35,7 +37,8 @@ body
 
 body.darktheme
     color: $text-color-darktheme
-    background: $window-color-darktheme
+    background-color: $window-color-darktheme
+    background-image: linear-gradient(180deg, $gradient-top-darktheme, $window-color-darktheme 200px)
 
 h1, h2, h3
     font-weight: normal

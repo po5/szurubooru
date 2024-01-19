@@ -248,7 +248,7 @@ def update_user_name(user: model.User, name: str) -> None:
     other_user = try_get_user_by_name(name)
     if other_user and other_user.user_id != user.user_id:
         raise UserAlreadyExistsError("User %r already exists." % name)
-    if user.name and files.has(get_avatar_path(user.name, user.image_key)):
+    if user.name and user.image_key and files.has(get_avatar_path(user.name, user.image_key)):
         files.move(get_avatar_path(user.name, user.image_key), get_avatar_path(name, user.image_key))
     user.name = name
 

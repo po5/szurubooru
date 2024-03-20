@@ -41,9 +41,6 @@ class TopNavigationController {
         if (!api.hasPrivilege("posts:create")) {
             topNavigation.hide("upload");
         }
-        if (!api.hasPrivilege("comments:list")) {
-            topNavigation.hide("comments");
-        }
         if (!api.hasPrivilege("tags:list")) {
             topNavigation.hide("tags");
         }
@@ -53,10 +50,11 @@ class TopNavigationController {
         if (!api.hasPrivilege("pools:list")) {
             topNavigation.hide("pools");
         }
+        if (!api.hasPrivilege("snapshots:list")) {
+            topNavigation.hide("history");
+        }
         if (api.isLoggedIn()) {
-            if (!api.hasPrivilege("users:create:any")) {
-                topNavigation.hide("register");
-            }
+            topNavigation.hide("register");
             topNavigation.hide("login");
         } else {
             if (!api.hasPrivilege("users:create:self")) {

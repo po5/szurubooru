@@ -52,6 +52,8 @@ def get_post_snapshot(post: model.Post) -> Dict[str, Any]:
         "checksum": post.checksum,
         "flags": post.flags,
         "featured": post.is_featured,
+        "description": post.description,
+        "alt_text": post.alt_text,
         "tags": sorted([tag.first_name for tag in post.tags]),
         "relations": sorted([rel.post_id for rel in post.relations]),
         "notes": sorted(

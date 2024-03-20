@@ -866,7 +866,7 @@ def update_post_title(post: model.Post, title: str) -> None:
 def update_post_alt_text(post: model.Post, alt_text: str) -> None:
     assert post
     if util.value_exceeds_column_size(alt_text, model.Post.alt_text):
-        raise InvalidPostAltTextError("Title is too long.")
+        raise InvalidPostAltTextError("Alt text is too long.")
     post.alt_text = alt_text or None
 
 

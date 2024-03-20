@@ -73,7 +73,7 @@ function gzipFile(file) {
 }
 
 function baseUrl() {
-    return process.env.BASE_URL ? process.env.BASE_URL : '/';
+    return process.env.BASE_URL ? process.env.BASE_URL : '/booru/';
 }
 
 // -------------------------------------------------

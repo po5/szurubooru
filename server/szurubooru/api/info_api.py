@@ -5,9 +5,6 @@ from typing import Dict, Optional
 from szurubooru import config, rest
 from szurubooru.func import auth, posts, users, util
 
-_cache_time = None  # type: Optional[datetime]
-_cache_result = None  # type: Optional[int]
-
 @rest.routes.get("/info/?")
 def get_info(ctx: rest.Context, _params: Dict[str, str] = {}) -> rest.Response:
     ret = {

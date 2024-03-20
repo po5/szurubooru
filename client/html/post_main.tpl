@@ -56,7 +56,7 @@
             <div class='pool-navigators-container'></div>
         <% } %>
 
-        <% if (ctx.editMode) { %>
+        <% if (ctx.editMode && ctx.canEditPostDescription) { %>
             <h2>Description</h2>
             <%= ctx.makeTextarea({
                 id: 'post-description',

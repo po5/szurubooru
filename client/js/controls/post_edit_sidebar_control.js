@@ -435,7 +435,7 @@ class PostEditSidebarControl extends events.EventTarget {
                         ? this._sourceInputNode.value
                         : undefined,
 
-                    description: this._descriptionTextareaNode
+                    description: (api.hasPrivilege("tags:edit:description") && this._descriptionTextareaNode)
                         ? this._descriptionTextareaNode.value
                         : undefined,
                 },

@@ -103,6 +103,7 @@ privileges:
     'posts:view:featured':          anonymous
     'posts:edit:alt_text':          power
     'posts:edit:content':           power
+    'posts:edit:description':       power
     'posts:edit:flags':             regular
     'posts:edit:notes':             regular
     'posts:edit:relations':         regular

@@ -18,7 +18,7 @@
         <%= ctx.makeRadio({
             required: true,
             text: 'Merge to this post<br/><small>' +
-                ctx.makeUserLink(ctx.post.user) +
+                ctx.makeUserUploadsLink(ctx.post.user) +
                 ', ' +
                 ctx.makeRelativeTime(ctx.post.creationTime) +
                 '</small>',

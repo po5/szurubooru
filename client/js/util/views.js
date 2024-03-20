@@ -277,18 +277,34 @@ function makePoolLink(id, includeHash, includeCount, pool, name) {
           );
 }
 
-function makeUserLink(user) {
+function makeUserLink(user, uploads) {
     let text = makeThumbnail(user ? user.avatarUrl : "img/favicon.png");
     text += user && user.name ? misc.escapeHtml(user.name) : "Anonymous";
-    const link =
-        user && user.name && api.hasPrivilege("users:view")
-            ? makeElement(
-                  "a",
-                  { href: uri.formatClientLink("user", user.name) },
-                  text
-              )
-            : text;
+    let link;
+    if (uploads) {
+        link =
+            user && user.name && api.hasPrivilege("users:view")
+                ? makeElement(
+                      "a",
+                      { href: uri.formatClientLink("posts", {query: "submit:" + user.name}) },
+                      text
+                  )
+                : text;
+    } else {
+        link =
+            user && user.name
+                ? makeElement(
+                      "a",
+                      { href: uri.formatClientLink("user", user.name) },
+                      text
+                  )
+                : text;
+    }
     return makeElement("span", { class: "user" }, link);
+}
+
+function makeUserUploadsLink(user) {
+    return makeUserLink(user, true)
 }
 
 function makeFlexboxAlign(options) {
@@ -470,6 +486,7 @@ function getTemplate(templatePath) {
             makeTagLink: makeTagLink,
             makePoolLink: makePoolLink,
             makeUserLink: makeUserLink,
+            makeUserUploadsLink: makeUserUploadsLink,
             makeFlexboxAlign: makeFlexboxAlign,
             makeAccessKey: makeAccessKey,
             makeElement: makeElement,

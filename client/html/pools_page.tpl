@@ -3,7 +3,7 @@
         <ul>
           <% for (let pool of ctx.response.results) { %>
             <li data-pool-id='<%= pool.id %>'>
-                <a class='thumbnail-wrapper' href='<%= ctx.canViewPools ? ctx.formatClientLink("pool", pool.id) : "" %>'>
+                <a class='thumbnail-wrapper' href='<%= ctx.canViewPools ? ctx.formatClientLink('posts', {query: 'pool:' + pool.id + ' -sort:pool'}) : "" %>'>
                     <% if (ctx.canViewPosts) { %>
                         <%= ctx.makePoolThumbnails(pool.posts, ctx.postFlow) %>
                     <% } %>

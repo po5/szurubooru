@@ -371,7 +371,6 @@ class PostSerializer(serialization.BaseSerializer):
         ]
 
     def serialize_custom_thumbnail_url(self) -> Any:
-        print("serialize_custom_thumbnail_url")
         if files.has(get_post_custom_thumbnail_path(self.post)):
             return get_post_custom_thumbnail_url(self.post)
 

@@ -155,12 +155,21 @@ class PostMainView {
         commentsIframe.src = `/booru/item/${ctx.post.id}/comments?darktheme=${document.body.classList.contains("darktheme") && "1" || ""}`;
         commentsIframe.style.height = "115px";
         views.replaceContent(commentsContainerNode, commentsIframe);
-        iframeResizer({
+
+        const frames = iframeResizer({
             autoResize: true,
             sizeHeight: true,
             sizeWidth: false,
             scrolling: false
         }, ".comments-iframe");
+
+        if (!frames.length) {
+            return;
+        }
+
+        views.monitorNodeRemoval(commentsContainerNode, () => {
+            frames[0].iFrameResizer.removeListeners();
+        });
     }
 }
 

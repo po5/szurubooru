@@ -116,30 +116,6 @@ class PostMainController extends BasePostController {
                     );
                 }
 
-                if (this._view.commentControl) {
-                    this._view.commentControl.addEventListener("change", (e) =>
-                        this._evtCommentChange(e)
-                    );
-                    this._view.commentControl.addEventListener("submit", (e) =>
-                        this._evtCreateComment(e)
-                    );
-                }
-
-                if (this._view.commentListControl) {
-                    this._view.commentListControl.addEventListener(
-                        "submit",
-                        (e) => this._evtUpdateComment(e)
-                    );
-                    this._view.commentListControl.addEventListener(
-                        "score",
-                        (e) => this._evtScoreComment(e)
-                    );
-                    this._view.commentListControl.addEventListener(
-                        "delete",
-                        (e) => this._evtDeleteComment(e)
-                    );
-                }
-
                 if (this._view.postDescription) {
                     this._view.postDescription.addEventListener("change", (e) =>
                         this._evtPostChange(e)

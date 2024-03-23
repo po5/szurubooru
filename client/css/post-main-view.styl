@@ -69,6 +69,11 @@
     .after-mobile-controls
         width: 100%
 
+    .comments-iframe
+        width: 100%
+        max-width: calc(100vw - 26.5em)
+        border: 1px solid #eee
+
 .darktheme .post-view
     >.sidebar, >.content
         nav.buttons
@@ -79,6 +84,9 @@
 
     .description-container
         background: $top-navigation-color-darktheme
+
+    .comments-iframe
+        border: 1px solid #333
 
 @media (max-width: 800px)
     .post-view
@@ -92,6 +100,8 @@
             margin-right: 0
         >.content
             order: 1
+        .comments-iframe
+            max-width: 100%
 
 
 .post-view .readonly-sidebar

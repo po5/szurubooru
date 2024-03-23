@@ -1,6 +1,7 @@
 "use strict";
 
 const iosCorrectedInnerHeight = require("@formfunfunction/inner-height");
+const {iframeResizer} = require("iframe-resizer");
 const router = require("../router.js");
 const views = require("../util/views.js");
 const uri = require("../util/uri.js");
@@ -11,8 +12,8 @@ const PostNotesOverlayControl = require("../controls/post_notes_overlay_control.
 const PostReadonlySidebarControl = require("../controls/post_readonly_sidebar_control.js");
 const PostEditSidebarControl = require("../controls/post_edit_sidebar_control.js");
 const PoolNavigatorListControl = require("../controls/pool_navigator_list_control.js");
-const CommentControl = require("../controls/comment_control.js");
-const CommentListControl = require("../controls/comment_list_control.js");
+//const CommentControl = require("../controls/comment_control.js");
+//const CommentListControl = require("../controls/comment_list_control.js");
 
 const template = views.getTemplate("post-main");
 
@@ -58,8 +59,7 @@ class PostMainView {
         }
 
         this._installSidebar(ctx);
-        this._installCommentForm();
-        this._installComments(ctx.post.comments);
+        this._installComments(ctx);
         this._installPoolNavigators(ctx.poolPostsNearby);
         this.postDescription = document.getElementById("post-description");
 
@@ -142,22 +142,7 @@ class PostMainView {
         );
     }
 
-    _installCommentForm() {
-        const commentFormContainer = document.querySelector(
-            "#content-holder .comment-form-container"
-        );
-        if (!commentFormContainer) {
-            return;
-        }
-
-        this.commentControl = new CommentControl(
-            commentFormContainer,
-            null,
-            true
-        );
-    }
-
-    _installComments(comments) {
+    _installComments(ctx) {
         const commentsContainerNode = document.querySelector(
             "#content-holder .comments-container"
         );
@@ -165,10 +150,17 @@ class PostMainView {
             return;
         }
 
-        this.commentListControl = new CommentListControl(
-            commentsContainerNode,
-            comments
-        );
+        const commentsIframe = document.createElement("iframe");
+        commentsIframe.classList.add("comments-iframe");
+        commentsIframe.src = `/booru/item/${ctx.post.id}/comments?darktheme=${document.body.classList.contains("darktheme") && "1" || ""}`;
+        commentsIframe.style.height = "115px";
+        views.replaceContent(commentsContainerNode, commentsIframe);
+        iframeResizer({
+            autoResize: true,
+            sizeHeight: true,
+            sizeWidth: false,
+            scrolling: false
+        }, ".comments-iframe");
     }
 }
 

@@ -40,7 +40,7 @@ def _serialize_post(
     ctx: rest.Context, post: Optional[model.Post]
 ) -> rest.Response:
     return posts.serialize_post(
-        post, ctx.user, options=["customThumbnailUrl", "user", "title", "altText"]
+        post, ctx.user, options=["thumbnailUrl", "customThumbnailUrl", "user", "title", "altText"]
     )
 
 
@@ -59,6 +59,7 @@ def get_post(
     post = _get_post(post_id)
     serialized = _serialize_post(ctx, post)
     title = serialized["title"] or serialized["altText"]
+    thumbnail = serialized["customThumbnailUrl"] or serialized["thumbnailUrl"]
     embed = {
         "version": "1.0",
         "type": "photo",
@@ -66,10 +67,10 @@ def get_post(
         "author_name": serialized["user"]["name"] if serialized["user"] else None,
         "provider_name": config.config["name"],
         "provider_url": config.config["homepage_url"],
-        "thumbnail_url": f"{config.config['site_url']}/{serialized['customThumbnailUrl']}",
+        "thumbnail_url": f"{config.config['site_url']}/{thumbnail}",
         "thumbnail_width": int(config.config["thumbnails"]["post_width"]),
         "thumbnail_height": int(config.config["thumbnails"]["post_height"]),
-        "url": f"{config.config['site_url']}/{serialized['customThumbnailUrl']}",
+        "url": f"{config.config['site_url']}/{thumbnail}",
         "width": int(config.config["thumbnails"]["post_width"]),
         "height": int(config.config["thumbnails"]["post_height"])
     }

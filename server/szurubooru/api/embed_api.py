@@ -40,7 +40,7 @@ def _serialize_post(
     ctx: rest.Context, post: Optional[model.Post]
 ) -> rest.Response:
     return posts.serialize_post(
-        post, ctx.user, options=serialization.get_serialization_options(ctx)
+        post, ctx.user, options=["customThumbnailUrl", "user", "title", "altText"]
     )
 
 
@@ -66,10 +66,10 @@ def get_post(
         "author_name": serialized["user"]["name"] if serialized["user"] else None,
         "provider_name": config.config["name"],
         "provider_url": config.config["homepage_url"],
-        "thumbnail_url": f"{config.config['site_url']}/{serialized['thumbnailUrl']}",
+        "thumbnail_url": f"{config.config['site_url']}/{serialized['customThumbnailUrl']}",
         "thumbnail_width": int(config.config["thumbnails"]["post_width"]),
         "thumbnail_height": int(config.config["thumbnails"]["post_height"]),
-        "url": f"{config.config['site_url']}/{serialized['thumbnailUrl']}",
+        "url": f"{config.config['site_url']}/{serialized['customThumbnailUrl']}",
         "width": int(config.config["thumbnails"]["post_width"]),
         "height": int(config.config["thumbnails"]["post_height"])
     }

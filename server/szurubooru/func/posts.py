@@ -1046,6 +1046,7 @@ def search_by_image(image_content: bytes) -> List[Tuple[float, model.Post]]:
     else:
         return []
 
+
 PoolPostsNearby = namedtuple('PoolPostsNearby', 'pool first_post prev_post next_post last_post')
 def get_pools_nearby(
     post: model.Post
@@ -1077,15 +1078,28 @@ def get_pools_nearby(
         response.append(resp_entry)
     return response
 
+
+def serialize_safe_post(
+    post: Optional[model.Post]
+) -> rest.Response:
+    return {"id": getattr(post, "post_id", None)} if post else None
+
+
+def serialize_id_post(
+    post_id: Optional[int]
+) -> rest.Response:
+    return serialize_safe_post(try_get_post_by_id(post_id)) if post_id else None
+
+
 def serialize_pool_posts_nearby(
     nearby: List[PoolPostsNearby]
 ) -> Optional[rest.Response]:
     return [
         {
             "pool": pools.serialize_micro_pool(entry.pool),
-            "firstPost": {"id": getattr(try_get_post_by_id(entry.first_post), "post_id", None)} if entry.first_post else None,
-            "lastPost": {"id": getattr(try_get_post_by_id(entry.last_post), "post_id", None)} if entry.last_post else None,
-            "previousPost": {"id": getattr(try_get_post_by_id(entry.prev_post), "post_id", None)} if entry.prev_post else None,
-            "nextPost": {"id": getattr(try_get_post_by_id(entry.next_post), "post_id", None)} if entry.next_post else None,
+            "firstPost": serialize_id_post(entry.first_post),
+            "lastPost": serialize_id_post(entry.last_post),
+            "previousPost": serialize_id_post(entry.prev_post),
+            "nextPost": serialize_id_post(entry.next_post),
         } for entry in nearby
     ]

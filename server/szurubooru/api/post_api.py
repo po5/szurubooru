@@ -298,7 +298,7 @@ def get_posts_around(
     _search_executor_config.user = ctx.user
     post_id = _get_post_id(params)
     return _search_executor.get_around_and_serialize(
-        ctx, post_id, lambda post: _serialize_post(ctx, post)
+        ctx, post_id, lambda post: posts.serialize_safe_post(post)
     )
 
 @rest.routes.get("/post/(?P<post_id>[^/]+)/pools-nearby/?")

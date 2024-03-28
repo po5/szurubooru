@@ -178,15 +178,11 @@ class PostMainController extends BasePostController {
         if (e.detail.relations !== undefined) {
             post.relations = e.detail.relations;
         }
-        if (e.detail.content !== undefined) {
-            post.newContent = e.detail.content;
-        }
-        if (e.detail.thumbnail !== undefined) {
-            post.newThumbnail = e.detail.thumbnail;
-        }
         if (e.detail.source !== undefined) {
             post.source = e.detail.source;
         }
+        post.newContent = e.detail.content;
+        post.newThumbnail = e.detail.thumbnail;
         post.save().then(
             () => {
                 this._view.sidebarControl.showSuccess("Post saved.");

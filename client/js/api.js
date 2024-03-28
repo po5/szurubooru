@@ -311,11 +311,16 @@ class Api extends events.EventTarget {
         // transform the request: upload each file, then make the request use
         // its tokens.
         data = Object.assign({}, data);
+        let fileData = {};
         let abortFunction = () => {};
         let promise = Promise.resolve();
         if (files) {
             for (let key of Object.keys(files)) {
                 const file = files[key];
+                if (file === null) {
+                    fileData[key] = null;
+                    continue;
+                }
                 const fileId = this._getFileId(file);
                 if (fileTokens[fileId]) {
                     data[key + "Token"] = fileTokens[fileId];
@@ -341,7 +346,7 @@ class Api extends events.EventTarget {
                     url,
                     requestFactory,
                     data,
-                    {},
+                    fileData,
                     options
                 );
                 abortFunction = () => requestPromise.abort();
@@ -405,7 +410,7 @@ class Api extends events.EventTarget {
             if (files) {
                 for (let key of Object.keys(files)) {
                     const value = files[key];
-                    if (value.constructor === String) {
+                    if (value !== null && value.constructor === String) {
                         data[key + "Url"] = value;
                     } else {
                         req.attach(key, value || new Blob());

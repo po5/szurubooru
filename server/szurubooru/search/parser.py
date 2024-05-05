@@ -1,4 +1,5 @@
 import re
+from typing import Generator
 
 from szurubooru import errors
 from szurubooru.search import criteria, tokens
@@ -69,10 +70,37 @@ def _parse_sort(value: str, negated: bool) -> tokens.SortToken:
     return tokens.SortToken(value, order)
 
 
+def query_split(s: str) -> Generator[str, None, None]:
+    token = []
+    in_quote = False
+
+    for chunk in re.split(r'\s+|(\\"|")', s):
+        if chunk is None:
+            # encountered a delimiter: commit token if we're not in a quote
+            if not in_quote:
+                yield ''.join(token)
+                token = []
+                continue
+            # otherwise, append the space to the current token
+            chunk = ' '
+
+        if not chunk:
+            continue
+        if chunk == '\\"':
+            token.append('"')
+        elif chunk == '"':
+            in_quote = not in_quote
+        else:
+            token.append(chunk)
+
+    if token:
+        yield ''.join(token)
+
+
 class Parser:
     def parse(self, query_text: str) -> SearchQuery:
         query = SearchQuery()
-        for chunk in re.split(r"\s+", (query_text or "").lower()):
+        for chunk in query_split((query_text or "").lower()):
             if not chunk:
                 continue
             negated = False

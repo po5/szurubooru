@@ -514,7 +514,7 @@ def _before_post_delete(
 ) -> None:
     if post.post_id:
         if config.config["delete_source_files"]:
-            pattern = config.config["thumbnails"]["post_filename_prefix"] + post.post_id + "_*"
+            pattern = config.config["thumbnails"]["post_filename_prefix"] + f"{post.post_id}_*"
             for file in files.find("posts", "**/" + pattern, recursive=True) + files.find("generated-thumbnails", "**/sample_" + pattern, recursive=True):
                 files.delete(file)
 

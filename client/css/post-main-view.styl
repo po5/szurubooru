@@ -53,9 +53,21 @@
             background-size: cover
             background-repeat: no-repeat
             background-origin: content-box
-            padding-right: 1.5em
+            margin-right: 1.5em
             @media (max-width: 1000px)
-                padding-right: 1em
+                margin-right: 1em
+            &.nsfw-warning:before
+                content: "NFSW - Click to reveal"
+                background-image: repeating-linear-gradient(45deg, $window-color, $window-color 10px, #e6e6e6 10px, #e6e6e6 20px)
+                position: absolute
+                top: 0
+                left: 0
+                height: 100%
+                width: 100%
+                z-index: 1
+                cursor: pointer
+                font-size: 2rem
+                text-align: center
 
     .description-container
         background: $top-navigation-color
@@ -87,6 +99,9 @@
 
     .comments-iframe
         border: 1px solid #333
+
+    .post-content.nsfw-warning:before
+        background-image: repeating-linear-gradient(45deg, $window-color-darktheme, $window-color-darktheme 10px, #333 10px, #333 20px)
 
 @media (max-width: 800px)
     .post-view

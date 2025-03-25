@@ -79,6 +79,7 @@ class PostMainController extends BasePostController {
                     canCreateComments: api.hasPrivilege("comments:create"),
                     canListPools: api.hasPrivilege("pools:list"),
                     canViewPools: api.hasPrivilege("pools:view"),
+                    canViewUnsafe: api.hasPrivilege("posts:list:unsafe"),
                     parameters: parameters,
                 });
 

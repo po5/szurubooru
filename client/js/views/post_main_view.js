@@ -61,6 +61,7 @@ class PostMainView {
         this._installSidebar(ctx);
         this._installComments(ctx);
         this._installPoolNavigators(ctx.poolPostsNearby);
+        this._installSafetyWarning(ctx);
         this.postDescription = document.getElementById("post-description");
 
         const showPreviousImage = () => {
@@ -169,6 +170,16 @@ class PostMainView {
 
         views.monitorNodeRemoval(commentsContainerNode, () => {
             frames[0].iFrameResizer.removeListeners();
+        });
+    }
+
+    _installSafetyWarning(ctx) {
+        if (ctx.canViewUnsafe || ctx.post.safety == "safe") return;
+        const postContent = document.querySelector(".post-content");
+        if (!postContent) return;
+        postContent.classList.add("nsfw-warning");
+        postContent.addEventListener("click", (e) => {
+            postContent.classList.remove("nsfw-warning");
         });
     }
 }

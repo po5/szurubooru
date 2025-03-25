@@ -243,6 +243,7 @@ function bundleConfig() {
 
 function bundleBinaryAssets() {
     fs.copyFileSync('./img/favicon.png', './public/img/favicon.png');
+    fs.copyFileSync('./img/nsfw.jpg', './public/img/nsfw.jpg');
     console.info('Copied images');
 
     fs.copyFileSync('./fonts/open_sans.woff2', './public/fonts/open_sans.woff2')

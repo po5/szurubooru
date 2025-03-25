@@ -485,7 +485,7 @@ class Post extends events.EventTarget {
                 response.contentUrl,
                 document.getElementsByTagName("base")[0].href
             ).href,
-            _thumbnailUrl: response.customThumbnailUrl ? response.customThumbnailUrl : response.thumbnailUrl,
+            _thumbnailUrl: (api.hasPrivilege("posts:list:unsafe") || response.safety == "safe") ? (response.customThumbnailUrl ? response.customThumbnailUrl : response.thumbnailUrl) : "img/nsfw.jpg",
             _customThumbnailUrl: response.customThumbnailUrl,
             _originalThumbnailUrl: response.thumbnailUrl,
             _source: response.source,

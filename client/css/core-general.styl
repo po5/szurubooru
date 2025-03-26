@@ -215,6 +215,11 @@ nav
                 &.opened
                     li
                         display: block
+                        &[data-name=home]
+                            a:before
+                                content: "Home"
+                            span
+                                display: none
         ul li[data-name=account],
         ul li[data-name=register],
         ul li[data-name=login],

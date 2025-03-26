@@ -8,8 +8,6 @@ const sectionTemplates = {
     about: views.getTemplate("help-about"),
     keyboard: views.getTemplate("help-keyboard"),
     search: views.getTemplate("help-search"),
-    comments: views.getTemplate("help-comments"),
-    tos: views.getTemplate("help-tos"),
 };
 const subsectionTemplates = {
     search: {

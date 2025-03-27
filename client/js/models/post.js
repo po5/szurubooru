@@ -193,6 +193,9 @@ class Post extends events.EventTarget {
     }
 
     static reverseSearch(content) {
+        if (!api.hasPrivilege("posts:reverse_search")) {
+            return Promise.resolve();
+        }
         let apiPromise = api.post(
             uri.formatApiLink("posts", "reverse-search"),
             {},

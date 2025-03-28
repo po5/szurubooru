@@ -91,7 +91,8 @@ function bundleHtml() {
     }
 
     const baseHtml = readTextFile('./html/index.htm')
-        .replace('<!-- Base HTML Placeholder -->', `<base href="${baseUrl()}"/>`);
+        .replace('<!-- Base HTML Placeholder -->', `<base href="${baseUrl()}"/>`)
+        .replace(/\$TIME\$/g, Date.now().toString());
     fs.writeFileSync('./public/index.htm', minifyHtml(baseHtml));
 
     let compiledTemplateJs = [
@@ -413,13 +414,13 @@ if (process.argv.includes('--watch')) {
     if (!process.argv.includes('--no-web-app-files')) {
         bundleWebAppFiles();
     }
-    if (!process.argv.includes('--no-html')) {
-        bundleHtml();
-    }
     if (!process.argv.includes('--no-css')) {
         bundleCss();
     }
     if (!process.argv.includes('--no-js')) {
         bundleJs();
+    }
+    if (!process.argv.includes('--no-html')) {
+        bundleHtml();
     }
 }

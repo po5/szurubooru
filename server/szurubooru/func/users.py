@@ -323,6 +323,8 @@ def update_user_avatar(
         image.resize_fill(
             int(config.config["thumbnails"]["avatar_width"]),
             int(config.config["thumbnails"]["avatar_height"]),
+            keep_transparency=False,
+            seek=False,
         )
         user.image_key = auth.create_password()
         avatar_path = "avatars/%s_%s.jpg" % (

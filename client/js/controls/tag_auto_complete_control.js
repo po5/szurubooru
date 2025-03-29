@@ -17,12 +17,13 @@ function _tagListToMatches(tags, options, negated) {
             }
             if (negated) {
                 tag.names = tag.names.map((tagName) => "-"+tagName);
+                tag.matchingNames = tag.matchingNames.map((tagName) => "-"+tagName);
             }
             const caption =
                 '<span class="' +
                 cssName +
                 '">' +
-                misc.escapeHtml(tag.names[0] + " (" + tag.postCount + ")") +
+                misc.escapeHtml(tag.matchingNames[0] + " (" + tag.postCount + ")") +
                 "</span>";
             return {
                 caption: caption,
@@ -76,6 +77,17 @@ class TagAutoCompleteControl extends AutoCompleteControl {
         };
 
         super(input, options);
+    }
+
+    _getActiveSuggestion() {
+        if (this._activeResult === -1) {
+            return null;
+        }
+        const result = this._results[this._activeResult].value;
+        const textToFind = this._options.getTextToFind();
+        result.matchingNames = result.names.filter((name) => misc.wildcardMatch(textToFind + "*", name, false));
+        result.matchingNames = result.matchingNames.length ? result.matchingNames : result.names;
+        return result;
     }
 }
 

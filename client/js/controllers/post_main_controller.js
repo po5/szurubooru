@@ -54,16 +54,29 @@ class PostMainController extends BasePostController {
                     });
                 }
 
+                const prevPostId = aroundPool
+                        ? (aroundPool.previousPost ? aroundPool.previousPost.id : null)
+                        : (aroundResponse.prev ? aroundResponse.prev.id : null);
+                const nextPostId = aroundPool
+                        ? (aroundPool.nextPost ? aroundPool.nextPost.id : null)
+                        : (aroundResponse.next ? aroundResponse.next.id : null);
+
+                // preload nearby posts
+                if (prevPostId) {
+                    Post.get(prevPostId, { noProgress: true }).then(misc.preloadPostImages);
+                    PostList.getAround(prevPostId, parameters ? parameters.query : null, { noProgress: true });
+                }
+                if (nextPostId) {
+                    Post.get(nextPostId, { noProgress: true }).then(misc.preloadPostImages);
+                    PostList.getAround(nextPostId, parameters ? parameters.query : null, { noProgress: true });
+                }
+
                 this._post = post;
                 this._view = new PostMainView({
                     post: post,
                     editMode: editMode,
-                    prevPostId: aroundPool
-                        ? (aroundPool.previousPost ? aroundPool.previousPost.id : null)
-                        : (aroundResponse.prev ? aroundResponse.prev.id : null),
-                    nextPostId: aroundPool
-                        ? (aroundPool.nextPost ? aroundPool.nextPost.id : null)
-                        : (aroundResponse.next ? aroundResponse.next.id : null),
+                    prevPostId: prevPostId,
+                    nextPostId: nextPostId,
                     canEditPosts: api.hasPrivilege("posts:edit"),
                     canEditPostDescription: api.hasPrivilege("posts:edit:description"),
                     canDeletePosts: api.hasPrivilege("posts:delete"),

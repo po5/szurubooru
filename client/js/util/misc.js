@@ -217,6 +217,16 @@ function wildcardMatch(pattern, str, sensitive = false) {
     return re.test(str);
 }
 
+function preloadPostImages(post) {
+    if (!["image", "animation"].includes(post.type)) {
+        return;
+    }
+    const thumb = new Image()
+    thumb.fetchPriority = "high";
+    thumb.src = post.thumbnailUrl;
+    new Image().src = post.contentUrl;
+}
+
 module.exports = {
     range: range,
     formatRelativeTime: formatRelativeTime,
@@ -236,4 +246,5 @@ module.exports = {
     dataURItoBlob: dataURItoBlob,
     getPrettyName: getPrettyName,
     wildcardMatch: wildcardMatch,
+    preloadPostImages: preloadPostImages,
 };

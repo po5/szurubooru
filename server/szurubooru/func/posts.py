@@ -384,8 +384,10 @@ class PostSerializer(serialization.BaseSerializer):
         return []
 
     def serialize_pools(self) -> List[Any]:
+        if not auth.has_privilege(self.auth_user, "pools:list"):
+            return []
         return [
-            pools.serialize_micro_pool(pool)
+            {**pools.serialize_micro_pool(pool), **get_pool_posts_nearby(self.post, pool)} if auth.has_privilege(self.auth_user, "pools:view") else pools.serialize_micro_pool(pool)
             for pool in sorted(
                 self.post.pools, key=lambda pool: pool.creation_time
             )
@@ -1042,38 +1044,6 @@ def search_by_image(image_content: bytes) -> List[Tuple[float, model.Post]]:
         return []
 
 
-PoolPostsNearby = namedtuple('PoolPostsNearby', 'pool first_post prev_post next_post last_post')
-def get_pools_nearby(
-    post: model.Post
-) -> List[PoolPostsNearby]:
-    response = []
-    pools = post.pools
-
-    for pool in pools:
-        prev_post_id = None
-        next_post_id = None
-        first_post_id = pool.posts[0].post_id,
-        last_post_id = pool.posts[-1].post_id,
-
-        for previous_item, current_item, next_item in _get_nearby_iter(pool.posts):
-            if post.post_id == current_item.post_id:
-                if previous_item != None:
-                    prev_post_id = previous_item.post_id
-                if next_item != None:
-                    next_post_id = next_item.post_id
-                break
-
-        resp_entry = PoolPostsNearby(
-            pool=pool,
-            first_post=first_post_id,
-            last_post=last_post_id,
-            prev_post=prev_post_id,
-            next_post=next_post_id,
-        )
-        response.append(resp_entry)
-    return response
-
-
 def serialize_safe_post(
     post: Optional[model.Post]
 ) -> rest.Response:
@@ -1086,15 +1056,25 @@ def serialize_id_post(
     return serialize_safe_post(try_get_post_by_id(post_id)) if post_id else None
 
 
-def serialize_pool_posts_nearby(
-    nearby: List[PoolPostsNearby]
-) -> Optional[rest.Response]:
-    return [
-        {
-            "pool": pools.serialize_micro_pool(entry.pool),
-            "firstPost": serialize_id_post(entry.first_post),
-            "lastPost": serialize_id_post(entry.last_post),
-            "previousPost": serialize_id_post(entry.prev_post),
-            "nextPost": serialize_id_post(entry.next_post),
-        } for entry in nearby
-    ]
+def get_pool_posts_nearby(
+    post: model.Post, pool: model.Pool
+) -> rest.Response:
+    prev_post_id = None
+    next_post_id = None
+    first_post_id = pool.posts[0].post_id,
+    last_post_id = pool.posts[-1].post_id,
+
+    for previous_item, current_item, next_item in _get_nearby_iter(pool.posts):
+        if post.post_id == current_item.post_id:
+            if previous_item != None:
+                prev_post_id = previous_item.post_id
+            if next_item != None:
+                next_post_id = next_item.post_id
+            break
+
+    return {
+        "firstPost": serialize_id_post(first_post_id),
+        "lastPost": serialize_id_post(last_post_id),
+        "previousPost": serialize_id_post(prev_post_id),
+        "nextPost": serialize_id_post(next_post_id),
+    }

@@ -16,14 +16,6 @@ class PostList extends AbstractList {
         );
     }
 
-    static getNearbyPoolPosts(id) {
-        return api.get(
-            uri.formatApiLink("post", id, "pools-nearby", {
-                fields: "id",
-            })
-        );
-    }
-
     static search(text, offset, limit, fields) {
         //For queries with random sorting, bypass cache by appending random number
         let cache = text != null && text.includes("sort:random")

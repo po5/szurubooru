@@ -21,9 +21,9 @@ body
     min-height: 100%
 
 body
+    display: flex
+    flex-direction: column
     background-color: $window-color
-    background-image: linear-gradient(180deg, $gradient-top, $window-color 200px)
-    background-repeat: no-repeat
     overflow-y: scroll
     margin: 0
     color: $text-color
@@ -38,7 +38,6 @@ body
 body.darktheme
     color: $text-color-darktheme
     background-color: $window-color-darktheme
-    background-image: linear-gradient(180deg, $gradient-top-darktheme, $window-color-darktheme 200px)
 
 h1, h2, h3
     font-weight: normal
@@ -87,8 +86,11 @@ form .fa-question-circle-o
     vertical-align: middle
 
 #content-holder
+    flex: 1 1 auto
     padding: 1.5em
     text-align: center
+    background-image: linear-gradient(180deg, $gradient-top, $window-color calc(200px - 2.3em))
+    background-repeat: no-repeat
     @media (max-width: 1000px)
         padding: 1em
     >.content-wrapper
@@ -125,8 +127,16 @@ form .fa-question-circle-o
                 margin-bottom: 0
 
 .darktheme #content-holder
+    background-image: linear-gradient(180deg, $gradient-top-darktheme, $window-color-darktheme calc(200px - 2.3em))
     >.content-wrapper:not(.transparent-container)
         background: $top-navigation-color-darktheme
+
+#top-navigation-holder:empty + #content-holder
+    background-image: linear-gradient(180deg, $gradient-top, $window-color 200px)
+
+.darktheme #top-navigation-holder:empty + #content-holder
+    background-image: linear-gradient(180deg, $gradient-top-darktheme, $window-color-darktheme 200px)
+
 
 hr
     border: 0

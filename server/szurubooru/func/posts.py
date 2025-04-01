@@ -237,7 +237,6 @@ class PostSerializer(serialization.BaseSerializer):
             "relationCount": self.serialize_relation_count,
             "featureCount": self.serialize_feature_count,
             "lastFeatureTime": self.serialize_last_feature_time,
-            "favoritedBy": self.serialize_favorited_by,
             "notes": self.serialize_notes,
             "comments": self.serialize_comments,
             "pools": self.serialize_pools,
@@ -361,12 +360,6 @@ class PostSerializer(serialization.BaseSerializer):
 
     def serialize_last_feature_time(self) -> Any:
         return None
-
-    def serialize_favorited_by(self) -> Any:
-        return [
-            users.serialize_micro_user(rel.user, self.auth_user)
-            for rel in self.post.favorited_by
-        ]
 
     def serialize_custom_thumbnail_url(self) -> Any:
         if files.has(get_post_custom_thumbnail_path(self.post)):

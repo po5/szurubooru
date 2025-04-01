@@ -227,6 +227,15 @@ function preloadPostImages(post) {
     new Image().src = post.contentUrl;
 }
 
+function isMediaCached(post) {
+    if (post.type !== "image") {
+        return false;
+    }
+    const img = new Image()
+    img.src = post.contentUrl;
+    return img.complete;
+}
+
 module.exports = {
     range: range,
     formatRelativeTime: formatRelativeTime,
@@ -247,4 +256,5 @@ module.exports = {
     getPrettyName: getPrettyName,
     wildcardMatch: wildcardMatch,
     preloadPostImages: preloadPostImages,
+    isMediaCached: isMediaCached,
 };

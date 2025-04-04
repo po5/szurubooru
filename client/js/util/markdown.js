@@ -123,16 +123,7 @@ function escapeHtml(unsafe) {
 function createRenderer() {
     const renderer = new marked.Renderer();
     renderer.image = (href, title, alt) => {
-        let [_, url, width, height] =
-            /^(.+?)(?:\s=\s*(\d*)\s*x\s*(\d*)\s*)?$/.exec(href);
-        let res = '<img src="' + escapeHtml(url) + '" alt="' + escapeHtml(alt);
-        if (width) {
-            res += '" width="' + width;
-        }
-        if (height) {
-            res += '" height="' + height;
-        }
-        return res + '">';
+        return `![${alt}](${href}${title ? ` "${title}"` : ''})`;
     };
     return renderer;
 }

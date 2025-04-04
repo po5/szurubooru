@@ -226,6 +226,18 @@ function isMediaCached(post) {
     return img.complete;
 }
 
+function matchingNames(text, names) {
+    const minLengthForPartialSearch = 3;
+    let matches = names.filter((name) => wildcardMatch(text + "*", name, false));
+
+    if (!matches.length && text.length >= minLengthForPartialSearch) {
+        matches = names.filter((name) => wildcardMatch("*" + text + "*", name, false));
+    }
+
+    matches = matches.length ? matches : names;
+    return matches;
+}
+
 module.exports = {
     range: range,
     formatRelativeTime: formatRelativeTime,
@@ -247,4 +259,5 @@ module.exports = {
     wildcardMatch: wildcardMatch,
     preloadPostImages: preloadPostImages,
     isMediaCached: isMediaCached,
+    matchingNames: matchingNames,
 };

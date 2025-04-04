@@ -5,12 +5,13 @@ const views = require("../util/views.js");
 const TagList = require("../models/tag_list.js");
 const AutoCompleteControl = require("./auto_complete_control.js");
 
-function _tagListToMatches(tags, options, negated) {
+function _tagListToMatches(text, tags, options, negated) {
     return [...tags]
         .sort((tag1, tag2) => {
             return tag2.usages - tag1.usages;
         })
         .map((tag) => {
+            tag.matchingNames = misc.matchingNames(text, tag.names);
             let cssName = misc.makeCssName(tag.category, "tag");
             if (options.isTaggedWith(tag.names[0])) {
                 cssName += " disabled";
@@ -69,7 +70,7 @@ class TagAutoCompleteControl extends AutoCompleteControl {
                 { noProgress: true }).then(
                     (response) =>
                         resolve(
-                            _tagListToMatches(response.results, this._options, negated)
+                            _tagListToMatches(text, response.results, this._options, negated)
                         ),
                     reject
                 );
@@ -85,8 +86,7 @@ class TagAutoCompleteControl extends AutoCompleteControl {
         }
         const result = this._results[this._activeResult].value;
         const textToFind = this._options.getTextToFind();
-        result.matchingNames = result.names.filter((name) => misc.wildcardMatch(textToFind + "*", name, false));
-        result.matchingNames = result.matchingNames.length ? result.matchingNames : result.names;
+        result.matchingNames = misc.matchingNames(textToFind, result.names);
         return result;
     }
 }

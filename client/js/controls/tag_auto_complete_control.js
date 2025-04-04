@@ -46,7 +46,7 @@ class TagAutoCompleteControl extends AutoCompleteControl {
         );
 
         options.getMatches = (text) => {
-            const negated = options.isNegationAllowed && text[0] == "-";
+            const negated = options.isNegationAllowed && text[0] === "-";
             if (negated) text = text.substring(1);
             if (!text) {
                 return new Promise((resolve, reject) => {
@@ -57,9 +57,9 @@ class TagAutoCompleteControl extends AutoCompleteControl {
 
             const term = misc.escapeSearchTerm(text);
             const query =
-                (text.length < minLengthForPartialSearch && text[0] != "-"
-                    ? term + "*"
-                    : "*" + term + "*") + " sort:usages";
+                (text.length >= minLengthForPartialSearch || (!options.isNegationAllowed && text[0] === "-")
+                    ? "*" + term + "*"
+                    : term + "*") + " sort:usages";
 
             return new Promise((resolve, reject) => {
                 TagList.search(query, 0, this._options.maxResults, [

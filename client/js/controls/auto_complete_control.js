@@ -230,7 +230,7 @@ class AutoCompleteControl {
     }
 
     _updateResults(textToFind) {
-        if (this._options.isNegationAllowed && textToFind == "-") {
+        if (this._options.isNegationAllowed && textToFind === "-") {
             this._results = [];
             this._activeResult = -1;
             this._refreshList();

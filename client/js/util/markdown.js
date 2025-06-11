@@ -134,6 +134,7 @@ function formatMarkdown(text) {
         renderer: renderer,
         breaks: true,
         smartypants: true,
+        headerIds: false,
     };
     let wrappers = [
         new SjisWrapper(),
@@ -163,6 +164,7 @@ function formatInlineMarkdown(text) {
         renderer: renderer,
         breaks: true,
         smartypants: true,
+        headerIds: false,
     };
     let wrappers = [
         new TildeWrapper(),

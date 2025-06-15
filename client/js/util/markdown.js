@@ -66,7 +66,7 @@ class EntityPermalinkWrapper extends BaseMarkdownWrapper {
         // enclosed entity shortlinks e.g. <#my tags>
         return text.replace(
             new RegExp(`(^|[^\\(\\\\])<([#+?])(.*?[^\\\\])>`, "mg"),
-            (match, lookbehind, prefix, capture) => `${lookbehind}${prefix}${escapeMarkdown(capture.replace(/\\(.)/g, "$1")).replace(/ /g, "\\ ")}`
+            (match, lookbehind, prefix, capture) => `${lookbehind}${prefix}${escapeMarkdown(capture.replace(/\\(.)/g, "$1")).replace(/ /g, "\\ ")}\u200B`
         );
     }
 }

@@ -54,22 +54,20 @@ class SjisWrapper extends BaseMarkdownWrapper {
 
 class SearchPermalinkWrapper extends BaseMarkdownWrapper {
     init(text) {
-        text = text.replace(
+        return text.replace(
             /\[search\]((?:[^\[]|\[(?!\/?search\]))+)\[\/search\]/gi,
             (match, capture) => `<#${escapeMarkdown(capture.replace(/\\(.)/g, "$1"))}>`
         );
-        return text;
     }
 }
 
 class EntityPermalinkWrapper extends BaseMarkdownWrapper {
     init(text) {
         // enclosed entity shortlinks e.g. <#my tags>
-        text = text.replace(
+        return text.replace(
             new RegExp(`(^|[^\\(\\\\])<([#+?])(.*?[^\\\\])>`, "mg"),
             (match, lookbehind, prefix, capture) => `${lookbehind}${prefix}${escapeMarkdown(capture.replace(/\\(.)/g, "$1")).replace(/ /g, "\\ ")}`
         );
-        return text;
     }
 }
 

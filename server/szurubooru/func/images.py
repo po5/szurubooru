@@ -32,7 +32,12 @@ def check_for_loop(content: bytes) -> bytes:
 class Image:
     def __init__(self, content: bytes) -> None:
         self.content = content
-        if mime.is_flash(mime.get_mime_type(self.content)):
+        mime_type = mime.get_mime_type(self.content)
+        if mime.is_heif(mime_type):
+            # FFmpeg does not support HEIF.
+            # https://trac.ffmpeg.org/ticket/6521
+            self.content = convert_heif_to_png(self.content)
+        elif mime.is_flash(mime_type):
             self.content = self.swf_to_png()
         self._reload_info()
 
@@ -274,14 +279,7 @@ class Image:
         ignore_error_if_data: bool = False,
         get_logs: bool = False,
     ) -> bytes:
-        mime_type = mime.get_mime_type(self.content)
-        if mime.is_heif(mime_type):
-            # FFmpeg does not support HEIF.
-            # https://trac.ffmpeg.org/ticket/6521
-            self.content = convert_heif_to_png(self.content)
-        extension = mime.get_extension(mime_type)
-        assert extension
-        with util.create_temp_file(suffix="." + extension) as handle:
+        with util.create_temp_file(suffix=".dat") as handle:
             handle.write(self.content)
             handle.flush()
             if program in ["ffmpeg", "ffprobe"]:

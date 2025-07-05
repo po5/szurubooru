@@ -32,10 +32,9 @@ def check_for_loop(content: bytes) -> bytes:
 class Image:
     def __init__(self, content: bytes) -> None:
         self.content = content
-        self._reload_info()
-        if self.info["format"]["format_name"] == "swf":
+        if mime.is_flash(mime.get_mime_type(self.content)):
             self.content = self.swf_to_png()
-            self._reload_info()
+        self._reload_info()
 
     @property
     def width(self) -> int:

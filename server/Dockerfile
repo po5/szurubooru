@@ -30,9 +30,38 @@ RUN apk --no-cache add \
         gallery_dl \
         "pyheif==0.6.1" \
         "heif-image-plugin>=0.3.2" \
-        youtube_dl \
-        "pillow-avif-plugin>=1.1.0" \
- && apk --no-cache del py3-pip
+        yt-dlp \
+        "pillow-avif-plugin~=1.1.0"
+RUN apk --no-cache del py3-pip
+
+# build and install mozjpeg
+RUN apk --no-cache add automake cmake nasm curl libpng-dev libpng \
+ && curl -fL "https://github.com/mozilla/mozjpeg/archive/refs/tags/v4.1.1.tar.gz" -o mozjpeg.tar.gz \
+ && tar xzf mozjpeg.tar.gz && cd mozjpeg-* \
+ && cmake -DCMAKE_INSTALL_PREFIX=/usr \
+        -DCMAKE_INSTALL_LIBDIR=/usr/lib \
+        -DBUILD_SHARED_LIBS=True \
+        -DCMAKE_BUILD_TYPE=None \
+        -DCMAKE_C_FLAGS="$CFLAGS" \
+        -DWITH_JPEG8=1 \
+        -DWITH_TURBOJPEG=1 \
+        -DENABLE_STATIC=0 \
+ && make install \
+ && cd .. \
+ && rm -rf mozjpeg.tar.gz mozjpeg-* \
+ && apk --no-cache del automake cmake nasm curl
+
+# build and install ruffle exporter
+ENV RUSTFLAGS="-C target-feature=-crt-static"
+RUN apk --no-cache add git rustup openjdk11 mesa-gl mesa-egl mesa-gles mesa-dri-gallium \
+ && rustup-init --default-toolchain nightly -y \
+ && git clone https://github.com/ruffle-rs/ruffle \
+ && cd ruffle \
+ && /root/.cargo/bin/cargo build --release --package=exporter \
+ && cp target/release/exporter /usr/bin/ \
+ && cd .. \
+ && rm -rf ruffle /root/.cargo \
+ && apk --no-cache del git rustup
 
 COPY ./ /opt/app/
 RUN rm -rf /opt/app/szurubooru/tests

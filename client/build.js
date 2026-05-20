@@ -184,6 +184,23 @@ function bundleVendorJs(compress) {
         }
         console.info('Bundled vendor JS');
     });
+   copyRuffleAssets();
+}
+
+function copyRuffleAssets() {
+    const src = './node_modules/@ruffle-rs/ruffle';
+    const dst = './public/js/ruffle';
+
+    for (const file of fs.readdirSync(src)) {
+        const srcFile = path.join(src, file);
+        const dstFile = path.join(dst, file);
+
+        if (fs.statSync(srcFile).isFile() && file.match(/\.(js|map|wasm)$/)) {
+            fs.copyFileSync(srcFile, dstFile);
+        }
+    }
+
+    console.info('Copied Ruffle assets');
 }
 
 function bundleAppJs(b, compress, callback) {
@@ -304,7 +321,8 @@ function makeOutputDirs() {
         './public/css',
         './public/fonts',
         './public/img',
-        './public/js'
+        './public/js',
+        './public/js/ruffle',
     ];
     for (let dir of dirs) {
         if (!fs.existsSync(dir)) {

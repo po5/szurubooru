@@ -79,8 +79,6 @@ class Image:
         return self._execute(
             [
                 "--silent",
-                "-g",
-                "gl",
                 "--",
                 "{path}",
                 "-",
@@ -300,7 +298,8 @@ class Image:
             out, err = proc.communicate()
             if proc.returncode != 0:
                 logger.warning(
-                    "Failed to execute {program} command (cli=%r, err=%r)".format(program=program),
+                    "Failed to execute %s command (cli=%r, err=%r)",
+                    program,
                     " ".join(shlex.quote(arg) for arg in cli),
                     err,
                 )

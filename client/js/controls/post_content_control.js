@@ -128,6 +128,11 @@ class PostContentControl {
             this._hostNode.appendChild(newNode);
         }
         this._postContentNode = newNode;
+        if (this._post.type === "flash") {
+            this._postContentNode.addEventListener("click", () => {
+                this._postContentNode.style.backgroundImage = "none";
+            });
+        }
         this._refreshSize();
     }
 

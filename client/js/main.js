@@ -48,7 +48,7 @@ window.RufflePlayer.config = {
     "autoplay": "off",
     "warnOnUnsupportedContent": false,
     "showSwfDownload": true,
-    "splashScreen": false,
+    "splashScreen": true,
 };
 
 Promise.resolve()
